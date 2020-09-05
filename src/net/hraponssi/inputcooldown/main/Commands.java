@@ -5,15 +5,20 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.plotsquared.core.player.PlotPlayer;
+import com.plotsquared.core.plot.Plot;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class Commands implements CommandExecutor {
 	
 	Main plugin;
+	Utils utils;
 	
 	public Commands(Main plugin) {
 		super();
 		this.plugin = plugin;
+		this.utils = new Utils();
 	}
 	
 	@Override
@@ -31,10 +36,20 @@ public class Commands implements CommandExecutor {
 					}else {
 						return true;
 					}
-				}else {
+				} else if(args[0].equalsIgnoreCase("set")) {
+					
+					return true;
+				} else {
+					p.sendMessage(ChatColor.RED + "Invalid arguments!");
 					return true;
 				}
 			}else {
+				p.sendMessage("test running");
+				if(utils.inOwnPlot(p)) {
+					p.sendMessage("you own that plot.");
+				}else {
+					p.sendMessage("not your plot");
+				}
 				return true;
 			}
 		}else {
