@@ -15,7 +15,9 @@ public class Main extends JavaPlugin{
 	EventHandlers eventHandlers;
 	
 	HashMap<Location, Integer> cooldownBlocks = new HashMap<>();
-	HashMap<Location, Integer> cooldowns = new HashMap<>();
+	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
+	
+	HashMap<Player, Integer> players = new HashMap<>();
 	
 	@Override
 	public void onDisable() {
@@ -37,6 +39,16 @@ public class Main extends JavaPlugin{
 		if(cooldownBlocks.containsKey(b.getLocation())) cooldownBlocks.remove(b.getLocation());
 	}
 	
+	public void removePlayer(Player p) {
+		if(players.containsKey(p)) players.remove(p);
+	}
+	
+	public void setPlayer(Player p, int timeout) {
+		if(players.containsKey(p)) {
+			players.replace(p, timeout);
+		}else players.put(p, timeout);
+	}
+	
 	public void addCooldownBlock(Block b, int t) {
 		if(cooldownBlocks.containsKey(b.getLocation())) {
 			cooldownBlocks.replace(b.getLocation(), t);
@@ -49,9 +61,9 @@ public class Main extends JavaPlugin{
 		return cooldowns.containsKey(b.getLocation());
 	}
 	
-	public void cooldown(Block b) {
+	public void cooldown(Block b, Player p) {
 		if(cooldownBlocks.containsKey(b.getLocation())) {
-			cooldowns.put(b.getLocation(), cooldownBlocks.get(b.getLocation()));
+			cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
 		}
 	}
 	

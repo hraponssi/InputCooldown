@@ -37,7 +37,7 @@ public class Commands implements CommandExecutor {
 						return true;
 					}
 				} else if(args[0].equalsIgnoreCase("set")) {
-					
+					int num = Integer.parseInt(args[1]);
 					return true;
 				} else {
 					p.sendMessage(ChatColor.RED + "Invalid arguments!");

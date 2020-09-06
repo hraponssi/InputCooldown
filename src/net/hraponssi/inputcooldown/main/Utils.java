@@ -17,4 +17,18 @@ public class Utils {
 		return false;
 	}
 	
+	public static boolean isInteger(String s) {
+	      boolean isValidInteger = false;
+	      try
+	      {
+	         Integer.parseInt(s);
+	         isValidInteger = true;
+	      }
+	      catch (NumberFormatException ex)
+	      {
+
+	      }
+	      return isValidInteger;
+	   }
+	
 }
