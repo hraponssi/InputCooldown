@@ -31,13 +31,25 @@ public class Commands implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length>0) {
 				if(args[0].equalsIgnoreCase("remove")) {
+					plugin.removePlayer(p);
+					p.sendMessage("remove from setters");
 					if(p.hasPermission("ic.admin")) {
 						return true;
 					}else {
 						return true;
 					}
 				} else if(args[0].equalsIgnoreCase("set")) {
-					int num = Integer.parseInt(args[1]);
+					if(args.length<2) {
+						p.sendMessage("Wrong format");
+						return true;
+					}
+					if(utils.isInteger(args[1])) {
+						int num = Integer.parseInt(args[1]);
+						plugin.setPlayer(p, num*20);
+					}else {
+						p.sendMessage("Wrong format");
+						return true;
+					}
 					return true;
 				} else {
 					p.sendMessage(ChatColor.RED + "Invalid arguments!");

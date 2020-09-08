@@ -13,6 +13,7 @@ public class Main extends JavaPlugin{
 	ConfigManager configManager;
 	Commands commands;
 	EventHandlers eventHandlers;
+	DataInterface dataInterface;
 	
 	HashMap<Location, Integer> cooldownBlocks = new HashMap<>();
 	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
@@ -21,7 +22,7 @@ public class Main extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
-		
+		dataInterface.saveData();
 	}
 	
 	@Override
@@ -29,10 +30,30 @@ public class Main extends JavaPlugin{
 		configManager = new ConfigManager(this);
 		commands = new Commands(this);
 		eventHandlers = new EventHandlers(this);
+		dataInterface = new DataInterface(this, configManager);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(eventHandlers, this);
 		getCommand("ic").setExecutor(commands);
 		getCommand("inputcooldown").setExecutor(commands);
+		configManager.setup();
+		dataInterface.loadData();
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			public void run() {
+				scheduler();
+			}
+		}, 1L, 1L);
+	}
+	
+	public void scheduler() {
+		for(Location l : cooldowns.keySet()) {
+			Cooldown cooldown = cooldowns.get(l);
+			cooldown.age++;
+			if(cooldown.age>=cooldown.time) {
+				cooldowns.remove(l);
+				continue;
+			}
+			cooldowns.replace(l, cooldown);
+		}
 	}
 	
 	public void removeCooldownBlock(Block b) {
@@ -59,6 +80,15 @@ public class Main extends JavaPlugin{
 	
 	public boolean isCooldown(Block b) {
 		return cooldowns.containsKey(b.getLocation());
+	}
+	
+	public Integer getCooldown(Block b) {
+		if(!cooldowns.containsKey(b.getLocation())) return 0;
+		Cooldown cooldown = cooldowns.get(b.getLocation());
+		int age = cooldown.age;
+		int time = cooldown.time;
+		int left = time-age;
+		return left/20;
 	}
 	
 	public void cooldown(Block b, Player p) {

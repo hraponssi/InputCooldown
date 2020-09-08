@@ -13,47 +13,49 @@ public class ConfigManager {
         super();
         this.plugin = plugin;
     }
-	public FileConfiguration icdatacfg;
-	public File icdatafile;
+	public FileConfiguration datacfg;
+	public File datafile;
 	Main plugin;
+	
+	String filename = "icdata.yml";
 
 	public void setup() {
 		if (!plugin.getDataFolder().exists()) {
 			plugin.getDataFolder().mkdir();
 		}
 
-		icdatafile = new File(plugin.getDataFolder(), "icdata.yml");
+		datafile = new File(plugin.getDataFolder(), filename);
 
-		if (!icdatafile.exists()) {
+		if (!datafile.exists()) {
 			try {
-				icdatafile.createNewFile();
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "The icdata.yml file has been created");
+				datafile.createNewFile();
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "The " + filename + " file has been created");
 			} catch (IOException e) {
 				Bukkit.getServer().getConsoleSender()
-						.sendMessage(ChatColor.RED + "Could not create the icdata.yml file");
+						.sendMessage(ChatColor.RED + "Could not create the " + filename + " file");
 			}
 		}
 
-		icdatacfg = YamlConfiguration.loadConfiguration(icdatafile);
+		datacfg = YamlConfiguration.loadConfiguration(datafile);
 	}
 
-	public FileConfiguration geticdata() {
-		return icdatacfg;
+	public FileConfiguration getdata() {
+		return datacfg;
 	}
 
-	public void saveicdata() {
+	public void savedata() {
 		try {
-			icdatacfg.save(icdatafile);
-			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "The icdata.yml file has been saved");
+			datacfg.save(datafile);
+			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "The " + filename + " file has been saved");
 
 		} catch (IOException e) {
-			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Could not save the icdata.yml file");
+			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Could not save the " + filename + " file");
 		}
 	}
 
-	public void reloadicdata() {
-		icdatacfg = YamlConfiguration.loadConfiguration(icdatafile);
-		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The icdata.yml file has been reload");
+	public void reloaddata() {
+		datacfg = YamlConfiguration.loadConfiguration(datafile);
+		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + filename + " file has been reload");
 
 	}
 }

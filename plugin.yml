@@ -3,7 +3,7 @@ version: 1.0.0
 description: inputcooldown plugin
 author: Hraponssi
 main: net.hraponssi.inputcooldown.main.Main
-depend: [Vault, PlotSquared]
+depend: [PlotSquared]
 api-version: 1.13
 commands:
    ic:
