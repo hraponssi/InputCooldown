@@ -39,11 +39,11 @@ public class ConfigManager {
 		datacfg = YamlConfiguration.loadConfiguration(datafile);
 	}
 
-	public FileConfiguration getdata() {
+	public FileConfiguration getData() {
 		return datacfg;
 	}
 
-	public void savedata() {
+	public void saveData() {
 		try {
 			datacfg.save(datafile);
 			Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "The " + filename + " file has been saved");
@@ -53,7 +53,7 @@ public class ConfigManager {
 		}
 	}
 
-	public void reloaddata() {
+	public void reloadData() {
 		datacfg = YamlConfiguration.loadConfiguration(datafile);
 		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + filename + " file has been reload");
 

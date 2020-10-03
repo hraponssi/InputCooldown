@@ -3,7 +3,10 @@ package net.hraponssi.inputcooldown.main;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.plotsquared.core.player.PlotPlayer;
@@ -14,7 +17,16 @@ public class Utils {
 	private static Collection<Material> inputMaterials = new ArrayList<>();
 	static {
 		inputMaterials.add(Material.STONE_BUTTON);
+		inputMaterials.add(Material.POLISHED_BLACKSTONE_BUTTON);
 		inputMaterials.add(Material.OAK_BUTTON);
+		inputMaterials.add(Material.BIRCH_BUTTON);
+		inputMaterials.add(Material.JUNGLE_BUTTON);
+		inputMaterials.add(Material.SPRUCE_BUTTON);
+		inputMaterials.add(Material.DARK_OAK_BUTTON);
+		inputMaterials.add(Material.ACACIA_BUTTON);
+		inputMaterials.add(Material.WARPED_BUTTON);
+		inputMaterials.add(Material.CRIMSON_BUTTON);
+		inputMaterials.add(Material.LEVER);
 	}
 
 	public boolean inOwnPlot(Player p) {
@@ -45,4 +57,16 @@ public class Utils {
 		return inputMaterials.contains(mat);
 	}
 
+	public int toInt(String s) {
+		return Integer.parseInt(s);
+	}
+	
+	public World getWorld(String s) {
+		return Bukkit.getWorld(s);
+	}
+	
+	public Location newLocation(int x, int y, int z, World world) {
+		return new Location(world, x, y, z);
+	}
+	
 }
