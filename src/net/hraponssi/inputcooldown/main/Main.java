@@ -38,6 +38,7 @@ public class Main extends JavaPlugin{
 		getCommand("inputcooldown").setExecutor(commands);
 		configManager.setup();
 		dataInterface.loadData();
+		dataInterface.loadLang();
 		Lang.reload();
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {

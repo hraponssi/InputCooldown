@@ -1,1 +1,8 @@
 #InputCooldown Lang file
+PREFIX: "&aInput&eCooldown"
+CHATPREFIX: "&aInput&eCooldown &7>"
+NOLONGERSETTER: "%prefix% &ayou are no longer setting a cooldown!"
+INVALIDFORMAT: "%prefix% &cinvalid format, use %format%!"
+NOWSETTING: "%prefix% &ayou are now setting a cooldown of %cooldown%!"
+PLOTERROR: "%prefix% &cYou can't set cooldowns on that plot!"
+INVALIDARGUMENTS: "%prefix% &cInvalid arguments!"

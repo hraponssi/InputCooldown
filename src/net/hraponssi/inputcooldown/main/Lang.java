@@ -17,13 +17,13 @@ public class Lang {
 	public static HashMap<String, String> langs = new HashMap<>();
 	
 	public static void reload() {
-		langs.put("prefix", prefix);
-		langs.put("chatPrefix", chatPrefix);
-		langs.put("noLongerSetter", nolongerSetter);
-		langs.put("invalidFormat", invalidFormat);
-		langs.put("nowSetting", nowSetting);
-		langs.put("plotError", plotError);
-		langs.put("invalidArguments", invalidArguments);
+		langs.put("PREFIX", prefix);
+		langs.put("CHATPREFIX", chatPrefix);
+		langs.put("NOLONGERSETTER", nolongerSetter);
+		langs.put("INVALIDFORMAT", invalidFormat);
+		langs.put("NOWSETTING", nowSetting);
+		langs.put("PLOTERROR", plotError);
+		langs.put("INVALIDARGUMENTS", invalidArguments);
 	}
 	
 	public static String getPrefix() {

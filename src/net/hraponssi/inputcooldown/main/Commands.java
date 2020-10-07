@@ -32,7 +32,7 @@ public class Commands implements CommandExecutor {
 			if(args.length>0) {
 				if(args[0].equalsIgnoreCase("remove")) {
 					plugin.removePlayer(p);
-					p.sendMessage(Lang.get("nolongerSetter"));
+					p.sendMessage(Lang.get("NOLONGERSETTER"));
 					if(p.hasPermission("ic.admin")) {
 						return true;
 					}else {
@@ -40,20 +40,20 @@ public class Commands implements CommandExecutor {
 					}
 				} else if(args[0].equalsIgnoreCase("set")) {
 					if(args.length<2) {
-						p.sendMessage(Lang.get("invalidFormat"));
+						p.sendMessage(Lang.get("INVALIDFORMAT"));
 						return true;
 					}
 					if(utils.isInteger(args[1])) {
 						int num = Integer.parseInt(args[1]);
 						plugin.setPlayer(p, num*20);
-						p.sendMessage(Lang.get("nowSetting"));
+						p.sendMessage(Lang.get("NOWSETTING"));
 					}else {
-						p.sendMessage(Lang.get("invalidFormat"));
+						p.sendMessage(Lang.get("INVALIDFORMAT"));
 						return true;
 					}
 					return true;
 				} else {
-					p.sendMessage(Lang.get("invalidArguments"));
+					p.sendMessage(Lang.get("INVALIDARGUMENTS"));
 					return true;
 				}
 			}else {
@@ -61,7 +61,7 @@ public class Commands implements CommandExecutor {
 				if(utils.inOwnPlot(p)) {
 					p.sendMessage("you own that plot.");
 				}else {
-					p.sendMessage(Lang.get("plotError"));
+					p.sendMessage(Lang.get("PLOTERROR"));
 				}
 				return true;
 			}
