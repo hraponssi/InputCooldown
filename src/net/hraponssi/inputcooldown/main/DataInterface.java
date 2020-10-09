@@ -40,6 +40,10 @@ public class DataInterface {
 	}
 	
 	public String read(String s) {
+		if(s == null) {
+			plugin.getLogger().warning("Tried to read null lang string");
+			return "";
+		}
 		String result = s;
 		if(result.length()>0) if(result.charAt(result.length()-1) == '"' || result.charAt(result.length()-1) == '\'') {
 			if(result.length()>1) result = result.substring(0, result.length()-2);
@@ -51,6 +55,7 @@ public class DataInterface {
 	}
 	
 	public void loadLang() {
+		configManager.reloadLang();
 		Lang.prefix = read(configManager.getData("lang").getString("PREFIX"));
 		Lang.chatPrefix = read(configManager.getData("lang").getString("CHATPREFIX"));
 		Lang.nolongerSetter = read(configManager.getData("lang").getString("NOLONGERSETTER"));
@@ -58,6 +63,12 @@ public class DataInterface {
 		Lang.nowSetting = read(configManager.getData("lang").getString("NOWSETTING"));
 		Lang.plotError = read(configManager.getData("lang").getString("PLOTERROR"));
 		Lang.invalidArguments = read(configManager.getData("lang").getString("INVALIDARGUMENTS"));
+		Lang.noPermission = read(configManager.getData("lang").getString("NOPERMISSION"));
+		Lang.configReloaded = read(configManager.getData("lang").getString("CONFIGRELOADED"));
+		Lang.checkingCooldowns = read(configManager.getData("lang").getString("CHECKINGCOOLDOWNS"));
+		Lang.notCheckingCooldowns = read(configManager.getData("lang").getString("NOTCHECKINGCOOLDOWNS"));
+		Lang.checkedCooldown = read(configManager.getData("lang").getString("CHECKEDCOOLDOWN"));
+		Lang.noCooldown = read(configManager.getData("lang").getString("NOCOOLDOWN"));
 		Lang.reload();
 	}
 	

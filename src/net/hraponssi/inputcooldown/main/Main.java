@@ -1,5 +1,6 @@
 package net.hraponssi.inputcooldown.main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class Main extends JavaPlugin{
 	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
 	
 	HashMap<Player, Integer> players = new HashMap<>();
+	
+	ArrayList<Player> checkers = new ArrayList<>();
 	
 	@Override
 	public void onDisable() {
@@ -59,6 +62,10 @@ public class Main extends JavaPlugin{
 		}
 	}
 	
+	public void reloadCfg() {
+		dataInterface.loadLang();
+	}
+	
 	public void removeCooldownBlock(Block b) {
 		if(cooldownBlocks.containsKey(b.getLocation())) cooldownBlocks.remove(b.getLocation());
 	}
@@ -82,7 +89,17 @@ public class Main extends JavaPlugin{
 	}
 	
 	public boolean isCooldown(Block b) {
+		return cooldownBlocks.containsKey(b.getLocation());
+	}
+	
+	public boolean hasCooldown(Block b) {
 		return cooldowns.containsKey(b.getLocation());
+	}
+	
+	public Integer getSetCooldown(Block b) {
+		if(!cooldownBlocks.containsKey(b.getLocation())) return 0;
+		int cooldown = cooldownBlocks.get(b.getLocation());
+		return cooldown;
 	}
 	
 	public Integer getCooldown(Block b) {

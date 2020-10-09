@@ -79,8 +79,12 @@ public class ConfigManager {
 
 	public void reloadData() {
 		datacfg = YamlConfiguration.loadConfiguration(datafile);
-		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + dataname + " file has been reload");
-		langcfg = YamlConfiguration.loadConfiguration(langfile);
-		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + langname + " file has been reload");
+		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + dataname + " file has been reloaded");
 	}
+	
+	public void reloadLang() {
+		langcfg = YamlConfiguration.loadConfiguration(langfile);
+		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + "The " + langname + " file has been reloaded");
+	}
+	
 }

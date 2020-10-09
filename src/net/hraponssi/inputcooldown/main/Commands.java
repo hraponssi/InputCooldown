@@ -40,16 +40,37 @@ public class Commands implements CommandExecutor {
 					}
 				} else if(args[0].equalsIgnoreCase("set")) {
 					if(args.length<2) {
-						p.sendMessage(Lang.get("INVALIDFORMAT"));
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <cooldown in seconds>"));
 						return true;
 					}
 					if(utils.isInteger(args[1])) {
 						int num = Integer.parseInt(args[1]);
 						plugin.setPlayer(p, num*20);
-						p.sendMessage(Lang.get("NOWSETTING"));
+						p.sendMessage(Lang.get("NOWSETTING", num + "s"));
 					}else {
-						p.sendMessage(Lang.get("INVALIDFORMAT"));
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <cooldown in seconds>"));
 						return true;
+					}
+					return true;
+				} else if(args[0].equalsIgnoreCase("reload")) {
+					if(p.hasPermission("ic.reload")) {
+						plugin.reloadCfg();
+						p.sendMessage(Lang.get("CONFIGRELOADED"));
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+					}
+					return true;
+				} else if(args[0].equalsIgnoreCase("check")) {
+					if(p.hasPermission("ic.user")) {
+						if(!plugin.checkers.contains(p)) {
+							plugin.checkers.add(p);
+							p.sendMessage(Lang.get("CHECKINGCOOLDOWNS"));
+						}else {
+							plugin.checkers.remove(p);
+							p.sendMessage(Lang.get("NOTCHECKINGCOOLDOWNS"));
+						}
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
 					}
 					return true;
 				} else {

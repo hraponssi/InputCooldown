@@ -34,9 +34,16 @@ public class EventHandlers implements Listener {
 	        		}
 	        		p.sendMessage("Set timeout of " + plugin.players.get(p));
 	        		plugin.addCooldownBlock(b, plugin.players.get(p));
+	        	}else if(plugin.checkers.contains(p)){
+	        		if(plugin.isCooldown(b)) {
+	        			p.sendMessage("That input has a cooldown of " + plugin.getSetCooldown(b));
+	        		}else {
+	        			p.sendMessage("That input has no cooldown.");
+	        		}
+	        		event.setCancelled(true);
 	        	}else {
 	        		p.sendMessage("input click");
-		            if(plugin.isCooldown(b)) {
+		            if(plugin.hasCooldown(b)) {
 		            	event.setCancelled(true);
 		            	p.sendMessage("That input has a cooldown of " + plugin.getCooldown(b));
 		            }else {

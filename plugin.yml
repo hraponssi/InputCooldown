@@ -4,7 +4,7 @@ description: inputcooldown plugin
 author: Hraponssi
 main: net.hraponssi.inputcooldown.main.Main
 depend: [PlotSquared]
-api-version: 1.13
+api-version: 1.16
 commands:
    ic:
       description: manage input cooldowns
@@ -21,9 +21,13 @@ permissions:
     children:
       ic.user: true
       ic.admin: true
+      ic.reload: true
   ic.user:
     description: Allows you to receive alerts
     default: true
   ic.admin:
-    description: Allows you to manage the config
+    description: Allows you to control all cooldowns
+    default: false
+  ic.reload:
+    description: Allows you to reload the config
     default: false
