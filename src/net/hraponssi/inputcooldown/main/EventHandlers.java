@@ -29,23 +29,23 @@ public class EventHandlers implements Listener {
 	        	if(plugin.players.containsKey(p)) {
 	        		event.setCancelled(true);
 	        		if(!utils.inOwnPlot(p)) {
-	        			p.sendMessage("You can only set cooldowns in your own plot");
+	        			p.sendMessage(Lang.get("PLOTERROR"));
 	        			return;
 	        		}
 	        		p.sendMessage("Set timeout of " + plugin.players.get(p));
 	        		plugin.addCooldownBlock(b, plugin.players.get(p));
 	        	}else if(plugin.checkers.contains(p)){
 	        		if(plugin.isCooldown(b)) {
-	        			p.sendMessage("That input has a cooldown of " + plugin.getSetCooldown(b));
+	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s"));
 	        		}else {
-	        			p.sendMessage("That input has no cooldown.");
+	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
 	        		}
 	        		event.setCancelled(true);
 	        	}else {
 	        		p.sendMessage("input click");
 		            if(plugin.hasCooldown(b)) {
 		            	event.setCancelled(true);
-		            	p.sendMessage("That input has a cooldown of " + plugin.getCooldown(b));
+		            	p.sendMessage(Lang.get("COOLDOWN",plugin.getCooldown(b) + "s"));
 		            }else {
 		            	plugin.cooldown(b, p);
 		            }

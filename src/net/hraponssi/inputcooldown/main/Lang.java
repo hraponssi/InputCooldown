@@ -19,6 +19,7 @@ public class Lang {
 	public static String checkedCooldown = "%prefix% &That input has a cooldown of %args%.";
 	public static String noCooldown = "%prefix% &That input doesn't have a cooldown.";
 	public static String notCheckingCooldowns = "%prefix% &aYou are no longer checking cooldowns you click.";
+	public static String cooldown = "%prefix% &aThat input is blocked for %args%.";
 	
 	public static HashMap<String, String> langs = new HashMap<>();
 	
@@ -36,6 +37,7 @@ public class Lang {
 		langs.put("CHECKEDCOOLDOWN", checkedCooldown);
 		langs.put("NOCOOLDOWN", noCooldown);
 		langs.put("NOTCHECKINGCOOLDOWNS", notCheckingCooldowns);
+		langs.put("COOLDOWN", cooldown);
 	}
 	
 	public static String getPrefix() {

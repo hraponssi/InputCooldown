@@ -69,6 +69,7 @@ public class DataInterface {
 		Lang.notCheckingCooldowns = read(configManager.getData("lang").getString("NOTCHECKINGCOOLDOWNS"));
 		Lang.checkedCooldown = read(configManager.getData("lang").getString("CHECKEDCOOLDOWN"));
 		Lang.noCooldown = read(configManager.getData("lang").getString("NOCOOLDOWN"));
+		Lang.cooldown = read(configManager.getData("lang").getString("COOLDOWN"));
 		Lang.reload();
 	}
 	

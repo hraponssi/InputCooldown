@@ -40,9 +40,13 @@ public class Main extends JavaPlugin{
 		getCommand("ic").setExecutor(commands);
 		getCommand("inputcooldown").setExecutor(commands);
 		configManager.setup();
-		dataInterface.loadData();
 		dataInterface.loadLang();
 		Lang.reload();
+		this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			public void run() {
+				dataInterface.loadData();
+			}
+		}, 1L);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
 				scheduler();
