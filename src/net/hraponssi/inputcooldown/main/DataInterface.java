@@ -1,5 +1,6 @@
 package net.hraponssi.inputcooldown.main;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -45,32 +46,27 @@ public class DataInterface {
 			return "";
 		}
 		String result = s;
+		plugin.getLogger().info("result " + result + " . " + result.length() + " l");
 		if(result.length()>0) if(result.charAt(result.length()-1) == '"' || result.charAt(result.length()-1) == '\'') {
-			if(result.length()>1) result = result.substring(0, result.length()-2);
+			if(result.length()>1) result = result.substring(0, result.length()-1);
 		}
 		if(result.length()>0) if(result.charAt(0) == '"' || result.charAt(result.length()-1) == '\'') {
-			if(result.length()>0) result = result.substring(1, result.length()-1);
+			if(result.length()>0) result = result.substring(1, result.length());
 		}
+		plugin.getLogger().info("result " + result + " . " + result.length() + " l");
 		return result;
 	}
 	
 	public void loadLang() {
 		configManager.reloadLang();
-		Lang.prefix = read(configManager.getData("lang").getString("PREFIX"));
-		Lang.chatPrefix = read(configManager.getData("lang").getString("CHATPREFIX"));
-		Lang.nolongerSetter = read(configManager.getData("lang").getString("NOLONGERSETTER"));
-		Lang.invalidFormat = read(configManager.getData("lang").getString("INVALIDFORMAT"));
-		Lang.nowSetting = read(configManager.getData("lang").getString("NOWSETTING"));
-		Lang.plotError = read(configManager.getData("lang").getString("PLOTERROR"));
-		Lang.invalidArguments = read(configManager.getData("lang").getString("INVALIDARGUMENTS"));
-		Lang.noPermission = read(configManager.getData("lang").getString("NOPERMISSION"));
-		Lang.configReloaded = read(configManager.getData("lang").getString("CONFIGRELOADED"));
-		Lang.checkingCooldowns = read(configManager.getData("lang").getString("CHECKINGCOOLDOWNS"));
-		Lang.notCheckingCooldowns = read(configManager.getData("lang").getString("NOTCHECKINGCOOLDOWNS"));
-		Lang.checkedCooldown = read(configManager.getData("lang").getString("CHECKEDCOOLDOWN"));
-		Lang.noCooldown = read(configManager.getData("lang").getString("NOCOOLDOWN"));
-		Lang.cooldown = read(configManager.getData("lang").getString("COOLDOWN"));
-		Lang.reload();
+		List<String> ls = configManager.getData("lang").getStringList("Strings");
+		HashMap<String, String> Strings = new HashMap<>();
+		for(String key: ls) {
+			String[] splitted = key.split(":", 2);
+			Strings.put(read(splitted[0]), read(splitted[1]));
+		}
+		plugin.getLogger().info(ls.size() + " Lang strings loaded");
+		Lang.setMap(Strings);
 	}
 	
 }

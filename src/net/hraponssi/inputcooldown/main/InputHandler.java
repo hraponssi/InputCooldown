@@ -9,6 +9,6 @@ public class InputHandler {
 		this.plugin = plugin;
 	}
 	
-	
+	//TODO Move everything handling inputs to here
 	
 }

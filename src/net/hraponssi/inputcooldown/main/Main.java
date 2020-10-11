@@ -41,7 +41,6 @@ public class Main extends JavaPlugin{
 		getCommand("inputcooldown").setExecutor(commands);
 		configManager.setup();
 		dataInterface.loadLang();
-		Lang.reload();
 		this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			public void run() {
 				dataInterface.loadData();

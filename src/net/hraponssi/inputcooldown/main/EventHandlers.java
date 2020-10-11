@@ -32,7 +32,7 @@ public class EventHandlers implements Listener {
 	        			p.sendMessage(Lang.get("PLOTERROR"));
 	        			return;
 	        		}
-	        		p.sendMessage("Set timeout of " + plugin.players.get(p));
+	        		p.sendMessage(Lang.get("SETCOOLDOWN", plugin.players.get(p)/20 + "s"));
 	        		plugin.addCooldownBlock(b, plugin.players.get(p));
 	        	}else if(plugin.checkers.contains(p)){
 	        		if(plugin.isCooldown(b)) {
