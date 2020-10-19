@@ -9,8 +9,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.plotsquared.core.PlotSquared;
+import com.plotsquared.core.api.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
+import com.plotsquared.core.plot.PlotArea;
+import com.plotsquared.core.plot.PlotId;
+import com.plotsquared.core.plot.world.PlotAreaManager;
 
 public class Utils {
 
@@ -37,6 +42,19 @@ public class Utils {
 			return true;
 		}
 		return false;
+	}
+	
+	public PlotId getPlot(Player p) {
+		PlotPlayer<?> player = PlotPlayer.wrap(p);
+		Plot plot = player.getCurrentPlot();
+		if(plot == null) return null;
+		return plot.getId();
+	}
+	
+	public PlotId getPlot(Location l) {
+		com.plotsquared.core.location.Location pl = new com.plotsquared.core.location.Location(l.getWorld().getName(),l.getBlockX(),l.getBlockY(),l.getBlockZ());
+		if(pl.getPlot() == null) return null;
+		return pl.getPlot().getId();
 	}
 
 	public boolean isInteger(String s) { //TODO dont acccept negative numbers

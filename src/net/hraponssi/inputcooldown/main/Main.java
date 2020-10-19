@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.plotsquared.core.plot.PlotId;
 
 public class Main extends JavaPlugin{
 
@@ -16,8 +19,11 @@ public class Main extends JavaPlugin{
 	Commands commands;
 	EventHandlers eventHandlers;
 	DataInterface dataInterface;
+	Utils utils;
 	
 	HashMap<Location, Integer> cooldownBlocks = new HashMap<>();
+	HashMap<String, Integer> cooldownPlots = new HashMap<>();
+	HashMap<String, Integer> cooldownPlotMaterials = new HashMap<>();
 	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
 	
 	HashMap<Player, Integer> players = new HashMap<>();
@@ -35,6 +41,7 @@ public class Main extends JavaPlugin{
 		commands = new Commands(this);
 		eventHandlers = new EventHandlers(this);
 		dataInterface = new DataInterface(this, configManager);
+		utils = new Utils();
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(eventHandlers, this);
 		getCommand("ic").setExecutor(commands);
@@ -84,11 +91,11 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void addCooldownBlock(Block b, int t) {
-		if(cooldownBlocks.containsKey(b.getLocation())) {
-			cooldownBlocks.replace(b.getLocation(), t);
-		}else {
-			cooldownBlocks.put(b.getLocation(), t);
-		}
+		cooldownBlocks.put(b.getLocation(), t);
+	}
+	
+	public void addCooldownPlot(String id, int t) {
+		cooldownPlots.put(id, t);
 	}
 	
 	public boolean isCooldown(Block b) {
@@ -97,6 +104,14 @@ public class Main extends JavaPlugin{
 	
 	public boolean hasCooldown(Block b) {
 		return cooldowns.containsKey(b.getLocation());
+	}
+	
+	public boolean hasCooldown(String id, Material mat) {
+		return cooldownPlotMaterials.containsKey(id + ":" + mat);
+	}
+	
+	public boolean hasCooldown(String id) {
+		return cooldownPlots.containsKey(id);
 	}
 	
 	public Integer getSetCooldown(Block b) {
@@ -115,8 +130,12 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void cooldown(Block b, Player p) {
+		PlotId id = utils.getPlot(b.getLocation());
 		if(cooldownBlocks.containsKey(b.getLocation())) {
 			cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+		}else if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
+			getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
+			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
 		}
 	}
 	

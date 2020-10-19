@@ -40,15 +40,33 @@ public class Commands implements CommandExecutor {
 					}
 				} else if(args[0].equalsIgnoreCase("set")) {
 					if(args.length<2) {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <cooldown in seconds>"));
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+						return true;
+					} else if(args.length<3) {
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 						return true;
 					}
-					if(utils.isInteger(args[1])) {
-						int num = Integer.parseInt(args[1]);
-						plugin.setPlayer(p, num*20);
-						p.sendMessage(Lang.get("NOWSETTING", num + "s"));
+					if(!args[1].equalsIgnoreCase("click") && !args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("plot")) {
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+						return true;
+					}
+					if(utils.isInteger(args[2])) {
+						int num = Integer.parseInt(args[2]);
+						if(args[1].equalsIgnoreCase("click")) {
+							plugin.setPlayer(p, num*20);
+							p.sendMessage(Lang.get("NOWSETTING", num + "s"));
+						}else if(args[1].equalsIgnoreCase("block")) {
+							p.sendMessage("block"); //TODO set default block type cooldowns for a plot
+						}else if(args[1].equalsIgnoreCase("plot")) {
+							if(!utils.inOwnPlot(p)) {
+			        			p.sendMessage(Lang.get("PLOTERROR"));
+			        			return true;
+			        		}
+							plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
+							p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
+						}
 					}else {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <cooldown in seconds>"));
+						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 						return true;
 					}
 					return true;
@@ -83,6 +101,11 @@ public class Commands implements CommandExecutor {
 					p.sendMessage("you own that plot.");
 				}else {
 					p.sendMessage(Lang.get("PLOTERROR"));
+				}
+				if(utils.getPlot(p) != null) {
+					p.sendMessage("plot id: " + utils.getPlot(p).x + "," + utils.getPlot(p).y);
+				}else {
+					p.sendMessage("Invalid plot");
 				}
 				return true;
 			}
