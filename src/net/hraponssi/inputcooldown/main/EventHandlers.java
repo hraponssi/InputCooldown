@@ -9,6 +9,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.plotsquared.core.plot.PlotId;
+
 public class EventHandlers implements Listener {
 
 	Main plugin;
@@ -34,6 +36,15 @@ public class EventHandlers implements Listener {
 	        		}
 	        		p.sendMessage(Lang.get("SETCOOLDOWN", plugin.players.get(p)/20 + "s"));
 	        		plugin.addCooldownBlock(b, plugin.players.get(p));
+	        	}else if(plugin.plotPlayers.containsKey(p)) {
+	        		event.setCancelled(true);
+	        		if(!utils.inOwnPlot(p)) {
+	        			p.sendMessage(Lang.get("PLOTERROR"));
+	        			return;
+	        		}
+	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p)/20 + "s"));
+	        		PlotId id = utils.getPlot(b.getLocation());
+	        		plugin.addCooldownPlotBlock(id.getX() + ";" + id.getY(), b.getType(), plugin.plotPlayers.get(p));
 	        	}else if(plugin.checkers.contains(p)){
 	        		if(plugin.isCooldown(b)) {
 	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s"));

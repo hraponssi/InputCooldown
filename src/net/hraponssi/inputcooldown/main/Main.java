@@ -23,10 +23,11 @@ public class Main extends JavaPlugin{
 	
 	HashMap<Location, Integer> cooldownBlocks = new HashMap<>();
 	HashMap<String, Integer> cooldownPlots = new HashMap<>();
-	HashMap<String, Integer> cooldownPlotMaterials = new HashMap<>();
+	HashMap<String, Integer> cooldownPlotBlocks = new HashMap<>();
 	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
 	
 	HashMap<Player, Integer> players = new HashMap<>();
+	HashMap<Player, Integer> plotPlayers = new HashMap<>();
 	
 	ArrayList<Player> checkers = new ArrayList<>();
 	
@@ -61,15 +62,17 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void scheduler() {
+		ArrayList<Location> removeList = new ArrayList<Location>();
 		for(Location l : cooldowns.keySet()) {
 			Cooldown cooldown = cooldowns.get(l);
 			cooldown.age++;
 			if(cooldown.age>=cooldown.time) {
-				cooldowns.remove(l);
+				removeList.add(l);
 				continue;
 			}
 			cooldowns.replace(l, cooldown);
 		}
+		for(Location l : removeList) cooldowns.remove(l);
 	}
 	
 	public void reloadCfg() {
@@ -82,6 +85,7 @@ public class Main extends JavaPlugin{
 	
 	public void removePlayer(Player p) {
 		if(players.containsKey(p)) players.remove(p);
+		if(plotPlayers.containsKey(p)) plotPlayers.remove(p);
 	}
 	
 	public void setPlayer(Player p, int timeout) {
@@ -90,8 +94,18 @@ public class Main extends JavaPlugin{
 		}else players.put(p, timeout);
 	}
 	
+	public void setPlotPlayer(Player p, int timeout) {
+		if(plotPlayers.containsKey(p)) {
+			plotPlayers.replace(p, timeout);
+		}else plotPlayers.put(p, timeout);
+	}
+	
 	public void addCooldownBlock(Block b, int t) {
 		cooldownBlocks.put(b.getLocation(), t);
+	}
+	
+	public void addCooldownPlotBlock(String id, Material mat, int t) {
+		cooldownPlotBlocks.put(id + ":" + mat.name(), t);
 	}
 	
 	public void addCooldownPlot(String id, int t) {
@@ -107,7 +121,7 @@ public class Main extends JavaPlugin{
 	}
 	
 	public boolean hasCooldown(String id, Material mat) {
-		return cooldownPlotMaterials.containsKey(id + ":" + mat);
+		return cooldownPlotBlocks.containsKey(id + ":" + mat.name());
 	}
 	
 	public boolean hasCooldown(String id) {
@@ -133,6 +147,9 @@ public class Main extends JavaPlugin{
 		PlotId id = utils.getPlot(b.getLocation());
 		if(cooldownBlocks.containsKey(b.getLocation())) {
 			cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+		}else if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) {
+			getLogger().info("Tried to cooldown block but only found plot material specific cooldown " + id.getX() + ";" + id.getY() + " " + b.getType().name());
+			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name()), b.getLocation(), p));
 		}else if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
 			getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
 			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));

@@ -19,7 +19,7 @@ import com.plotsquared.core.plot.world.PlotAreaManager;
 
 public class Utils {
 
-	private static Collection<Material> inputMaterials = new ArrayList<>();
+	public final static Collection<Material> inputMaterials = new ArrayList<>();
 	static {
 		inputMaterials.add(Material.STONE_BUTTON);
 		inputMaterials.add(Material.POLISHED_BLACKSTONE_BUTTON);
@@ -34,7 +34,7 @@ public class Utils {
 		inputMaterials.add(Material.LEVER);
 	}
 
-	public boolean inOwnPlot(Player p) {
+	public boolean inOwnPlot(Player p) { //TODO add config option to choose allowing trusted or members to add
 		PlotPlayer<?> player = PlotPlayer.wrap(p);
 		Plot plot = player.getCurrentPlot();
 		if(plot == null) return false;

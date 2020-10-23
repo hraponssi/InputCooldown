@@ -56,7 +56,8 @@ public class Commands implements CommandExecutor {
 							plugin.setPlayer(p, num*20);
 							p.sendMessage(Lang.get("NOWSETTING", num + "s"));
 						}else if(args[1].equalsIgnoreCase("block")) {
-							p.sendMessage("block"); //TODO set default block type cooldowns for a plot
+							p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
+							plugin.setPlotPlayer(p, num*20);
 						}else if(args[1].equalsIgnoreCase("plot")) {
 							if(!utils.inOwnPlot(p)) {
 			        			p.sendMessage(Lang.get("PLOTERROR"));

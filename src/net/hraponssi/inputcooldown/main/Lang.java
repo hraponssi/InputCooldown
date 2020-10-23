@@ -25,7 +25,7 @@ public class Lang {
 		if(langs.containsKey(name)) {
 			String msg = langs.get(name);
 			if(msg.contains("%prefix%")) msg = msg.replaceAll("%prefix%", get("CHATPREFIX"));
-			msg = msg.replaceAll("%args%", arg);
+			if(arg != null) msg = msg.replaceAll("%args%", arg);
 			return ChatColor.translateAlternateColorCodes('&', msg);
 		}
 		return null;

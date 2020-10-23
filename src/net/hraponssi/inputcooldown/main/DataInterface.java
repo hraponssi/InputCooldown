@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -35,6 +36,10 @@ public class DataInterface {
 			int time = plugin.cooldownPlots.get(id);
 			cp.add(id +  ":" +  "DEFAULT" + "~"  + time);
 		}
+		for(String id : plugin.cooldownPlotBlocks.keySet()) {
+			int time = plugin.cooldownPlotBlocks.get(id);
+			cp.add(id + "~"  + time);
+		}
 		configManager.saveData();
 	}
 	
@@ -52,6 +57,12 @@ public class DataInterface {
 			if(datasplitted[0].equals("DEFAULT")) {
 				plugin.addCooldownPlot(splitted[0], utils.toInt(datasplitted[1]));
 			}else {
+				Material mat = Material.getMaterial(datasplitted[0]);
+				if(utils.isInput(mat)) {
+					plugin.addCooldownPlotBlock(splitted[0], mat, utils.toInt(datasplitted[1]));
+				}else{
+					plugin.getLogger().warning("Tried to parse plot wide block cooldown with invalid input type " + datasplitted[0]);
+				}
 				//specific block default plot cooldown
 			}
 		}
