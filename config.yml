@@ -1,0 +1,5 @@
+#InputCooldown Config
+
+#Minimum plot access level for setting input cooldowns
+#Options: Owner, Trusted, Member
+minimumAccess:Owner

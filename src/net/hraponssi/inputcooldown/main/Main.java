@@ -3,6 +3,7 @@ package net.hraponssi.inputcooldown.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,6 +29,8 @@ public class Main extends JavaPlugin{
 	
 	HashMap<Player, Integer> players = new HashMap<>();
 	HashMap<Player, Integer> plotPlayers = new HashMap<>();
+	
+	ArrayList<Player> admins = new ArrayList<>();
 	
 	ArrayList<Player> checkers = new ArrayList<>();
 	
@@ -143,6 +146,20 @@ public class Main extends JavaPlugin{
 		return left/20;
 	}
 	
+	public HashMap<String, Integer> getPlotCooldowns(String id){
+		HashMap<String, Integer> cooldowns = new HashMap<String, Integer>();
+		for(Entry<String, Integer> entry : cooldownPlotBlocks.entrySet()) {
+			String key = entry.getKey();
+			int time = entry.getValue();
+			if(key.startsWith(id)) {
+				String[] splitKey = key.split(":");
+				cooldowns.put(splitKey[1], time);
+			}
+		}
+		if(cooldownPlots.containsKey(id)) cooldowns.put("DEFAULT" , cooldownPlots.get(id));
+		return cooldowns;
+	}
+	
 	public void cooldown(Block b, Player p) {
 		PlotId id = utils.getPlot(b.getLocation());
 		if(cooldownBlocks.containsKey(b.getLocation())) {
@@ -153,6 +170,16 @@ public class Main extends JavaPlugin{
 		}else if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
 			getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
 			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
+		}
+	}
+
+	public boolean toggleAdmin(Player p) {
+		if(admins.contains(p)) {
+			admins.remove(p);
+			return false;
+		}else {
+			admins.add(p);
+			return true;
 		}
 	}
 	

@@ -31,7 +31,7 @@ public class EventHandlers implements Listener {
 	        	if(plugin.players.containsKey(p)) {
 	        		event.setCancelled(true);
 	        		if(!utils.inOwnPlot(p)) {
-	        			p.sendMessage(Lang.get("PLOTERROR"));
+	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
 	        		}
 	        		p.sendMessage(Lang.get("SETCOOLDOWN", plugin.players.get(p)/20 + "s"));
@@ -39,7 +39,7 @@ public class EventHandlers implements Listener {
 	        	}else if(plugin.plotPlayers.containsKey(p)) {
 	        		event.setCancelled(true);
 	        		if(!utils.inOwnPlot(p)) {
-	        			p.sendMessage(Lang.get("PLOTERROR"));
+	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
 	        		}
 	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p)/20 + "s"));

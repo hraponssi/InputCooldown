@@ -1,5 +1,7 @@
 package net.hraponssi.inputcooldown.main;
 
+import java.util.Map.Entry;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,16 +13,16 @@ import com.plotsquared.core.plot.Plot;
 import net.md_5.bungee.api.ChatColor;
 
 public class Commands implements CommandExecutor {
-	
+
 	Main plugin;
 	Utils utils;
-	
+
 	public Commands(Main plugin) {
 		super();
 		this.plugin = plugin;
 		this.utils = new Utils();
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
 		if(command.equalsIgnoreCase("ic") || command.equalsIgnoreCase("inputcooldown")){
@@ -30,7 +32,7 @@ public class Commands implements CommandExecutor {
 			}
 			Player p = (Player) sender;
 			if(args.length>0) {
-				if(args[0].equalsIgnoreCase("remove")) {
+				if(args[0].equalsIgnoreCase("remove")) { //TODO improve this
 					plugin.removePlayer(p);
 					p.sendMessage(Lang.get("NOLONGERSETTER"));
 					if(p.hasPermission("ic.admin")) {
@@ -52,6 +54,11 @@ public class Commands implements CommandExecutor {
 					}
 					if(utils.isInteger(args[2])) {
 						int num = Integer.parseInt(args[2]);
+						if(num == 0) {
+							plugin.removePlayer(p);
+							p.sendMessage(Lang.get("NOLONGERSETTER"));
+							return true;
+						}
 						if(args[1].equalsIgnoreCase("click")) {
 							plugin.setPlayer(p, num*20);
 							p.sendMessage(Lang.get("NOWSETTING", num + "s"));
@@ -60,9 +67,9 @@ public class Commands implements CommandExecutor {
 							plugin.setPlotPlayer(p, num*20);
 						}else if(args[1].equalsIgnoreCase("plot")) {
 							if(!utils.inOwnPlot(p)) {
-			        			p.sendMessage(Lang.get("PLOTERROR"));
-			        			return true;
-			        		}
+								p.sendMessage(Lang.get("PLOTACCESSERROR"));
+								return true;
+							}
 							plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
 							p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
 						}
@@ -75,6 +82,36 @@ public class Commands implements CommandExecutor {
 					if(p.hasPermission("ic.reload")) {
 						plugin.reloadCfg();
 						p.sendMessage(Lang.get("CONFIGRELOADED"));
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+					}
+					return true;
+				} else if(args[0].equalsIgnoreCase("admin")) {
+					if(p.hasPermission("ic.admin")) {
+						if(plugin.toggleAdmin(p)) {
+							p.sendMessage(Lang.get("ADMINENABLED"));
+						}else {
+							p.sendMessage(Lang.get("ADMINDISABLED"));
+						}
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+					}
+					return true;
+				} else if(args[0].equalsIgnoreCase("list")) {
+					if(p.hasPermission("ic.user")) {
+						if(utils.getPlot(p) != null) {
+							if(utils.inOwnPlot(p)) {
+								String plotID = utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY();
+								p.sendMessage(Lang.get("PLOTCOOLDOWNLIST", plotID));
+								for(Entry<String, Integer> entry : plugin.getPlotCooldowns(plotID).entrySet()) {
+									p.sendMessage(ChatColor.GREEN + entry.getKey().toLowerCase() + ChatColor.GRAY +" - " + ChatColor.GREEN + entry.getValue()/20 + "s");
+								}
+							}else {
+								p.sendMessage(Lang.get("PLOTACCESSERROR"));
+							}
+						}else {
+							p.sendMessage(Lang.get("PLOTERROR"));
+						}
 					}else {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 					}
@@ -101,7 +138,7 @@ public class Commands implements CommandExecutor {
 				if(utils.inOwnPlot(p)) {
 					p.sendMessage("you own that plot.");
 				}else {
-					p.sendMessage(Lang.get("PLOTERROR"));
+					p.sendMessage(Lang.get("PLOTACCESSERROR"));
 				}
 				if(utils.getPlot(p) != null) {
 					p.sendMessage("plot id: " + utils.getPlot(p).x + "," + utils.getPlot(p).y);
@@ -114,5 +151,5 @@ public class Commands implements CommandExecutor {
 			return false;
 		}
 	}
-	
+
 }
