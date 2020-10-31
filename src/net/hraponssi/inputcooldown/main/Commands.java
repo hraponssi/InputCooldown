@@ -40,7 +40,22 @@ public class Commands implements CommandExecutor {
 					}else {
 						return true;
 					}
-				} else if(args[0].equalsIgnoreCase("set")) {
+				} if(args[0].equalsIgnoreCase("reset")) {
+					if(p.hasPermission("ic.user")) {
+						if(plugin.reseters.contains(p)) {
+							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.RED + "off"));
+							plugin.reseters.remove(p);
+							return true;
+						}else {
+							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.GREEN + "on"));
+							plugin.reseters.add(p);
+							return true;
+						}
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+						return true;
+					}
+				} else if(args[0].equalsIgnoreCase("set")) { //TODO perm check
 					if(args.length<2) {
 						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 						return true;

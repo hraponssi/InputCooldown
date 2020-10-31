@@ -33,6 +33,7 @@ public class Main extends JavaPlugin{
 	ArrayList<Player> admins = new ArrayList<>();
 	
 	ArrayList<Player> checkers = new ArrayList<>();
+	ArrayList<Player> reseters = new ArrayList<>();
 	
 	@Override
 	public void onDisable() {
@@ -68,6 +69,7 @@ public class Main extends JavaPlugin{
 		ArrayList<Location> removeList = new ArrayList<Location>();
 		for(Location l : cooldowns.keySet()) {
 			Cooldown cooldown = cooldowns.get(l);
+			if(!l.getWorld().isChunkLoaded(l.getBlockX()/16, l.getBlockZ()/16)) continue; //Checks if chunk isnt loaded without loading chunk
 			cooldown.age++;
 			if(cooldown.age>=cooldown.time) {
 				removeList.add(l);
@@ -84,6 +86,10 @@ public class Main extends JavaPlugin{
 	
 	public void removeCooldownBlock(Block b) {
 		if(cooldownBlocks.containsKey(b.getLocation())) cooldownBlocks.remove(b.getLocation());
+	}
+	
+	public void resetCooldown(Block b) {
+		if(cooldowns.containsKey(b.getLocation())) cooldowns.remove(b.getLocation());
 	}
 	
 	public void removePlayer(Player p) {
@@ -171,6 +177,12 @@ public class Main extends JavaPlugin{
 			getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
 			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
 		}
+	}
+	
+	public void addCooldown(Block b, Player p, int time, int age) {
+		Cooldown cooldown = new Cooldown(time, b.getLocation(), p);
+		cooldown.age = age;
+		cooldowns.put(b.getLocation(), cooldown);
 	}
 
 	public boolean toggleAdmin(Player p) {

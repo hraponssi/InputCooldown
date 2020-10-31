@@ -45,9 +45,18 @@ public class EventHandlers implements Listener {
 	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p)/20 + "s"));
 	        		PlotId id = utils.getPlot(b.getLocation());
 	        		plugin.addCooldownPlotBlock(id.getX() + ";" + id.getY(), b.getType(), plugin.plotPlayers.get(p));
-	        	}else if(plugin.checkers.contains(p)){
+	        	}else if(plugin.checkers.contains(p)){ //TODO update for non block specific cooldowns
 	        		if(plugin.isCooldown(b)) {
 	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s"));
+	        		}else {
+	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
+	        		}
+	        		event.setCancelled(true);
+	        	}else if(plugin.reseters.contains(p)){
+	        		if(plugin.hasCooldown(b)) {
+	        			int time = plugin.getCooldown(b);
+	        			plugin.resetCooldown(b);
+	        			p.sendMessage(Lang.get("COOLDOWNRESET", time + "s"));
 	        		}else {
 	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
 	        		}

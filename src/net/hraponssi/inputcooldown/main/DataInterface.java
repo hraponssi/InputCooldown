@@ -2,7 +2,9 @@ package net.hraponssi.inputcooldown.main;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,10 +42,27 @@ public class DataInterface {
 			int time = plugin.cooldownPlotBlocks.get(id);
 			cp.add(id + "~"  + time);
 		}
+		List<String> cbs = configManager.getData("data").getStringList("cooldownBlockSaves");
+		configManager.getData("data").set("cooldownBlockSaves", cbs);
+		cbs.clear();
+		for(Location loc : plugin.cooldowns.keySet()) {
+			Cooldown cooldown = plugin.cooldowns.get(loc);
+			String stringLoc = loc.getBlockX() + "~"  + loc.getBlockY() +"~"+  loc.getBlockZ() +"~"+  loc.getWorld().getName();
+			cbs.add(cooldown.time + "~" + cooldown.age + ":" +  stringLoc + ":" + cooldown.user.getUniqueId().toString());
+		}
 		configManager.saveData();
 	}
 	
 	public void loadData() {
+		List<String> bc = configManager.getData("data").getStringList("cooldownBlockSaves");
+		for(String key: bc) {
+			String[] splitted = key.split(":");
+			String[] timesplitted = splitted[0].split("~");
+			String[] locsplitted = splitted[1].split("~");
+			Location loc = utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]), utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3]));
+			UUID uuid = UUID.fromString(splitted[2]);
+			plugin.addCooldown(loc.getBlock(), Bukkit.getOfflinePlayer(uuid).getPlayer(), utils.toInt(timesplitted[0]), utils.toInt(timesplitted[1]));
+		}
 		List<String> cb = configManager.getData("data").getStringList("cooldownBlocks");
 		for(String key: cb) {
 			String[] splitted = key.split(":");

@@ -22,3 +22,5 @@ Strings:
 - PLOTCOOLDOWNLIST:"%prefix% &aPlot %args% input cooldowns:"
 - ADMINENABLED:"%prefix% &aAdmin mode enabled."
 - ADMINDISABLED:"%prefix% &cAdmin mode disabled."
+- RESETERTOGGLE:"%prefix% &aReset mode toggled %args%."
+- COOLDOWNRESET:"%prefix% &aCooldown of %args% reset!"
