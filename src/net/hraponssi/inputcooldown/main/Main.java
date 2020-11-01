@@ -1,5 +1,9 @@
 package net.hraponssi.inputcooldown.main;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +12,8 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +41,13 @@ public class Main extends JavaPlugin{
 	ArrayList<Player> checkers = new ArrayList<>();
 	ArrayList<Player> reseters = new ArrayList<>();
 	
+	//Config values
+	int minimumAccess = 1;
+	
+	int maxTime = 3600;
+	int minTime = 3;
+	int maxPlotCooldowns = -1;
+	
 	@Override
 	public void onDisable() {
 		dataInterface.saveData();
@@ -53,6 +66,8 @@ public class Main extends JavaPlugin{
 		getCommand("inputcooldown").setExecutor(commands);
 		configManager.setup();
 		dataInterface.loadLang();
+		setConfig();
+		loadConfig();
 		this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			public void run() {
 				dataInterface.loadData();
@@ -82,6 +97,34 @@ public class Main extends JavaPlugin{
 	
 	public void reloadCfg() {
 		dataInterface.loadLang();
+	}
+	
+	public void loadConfig() {
+		reloadConfig();
+		FileConfiguration config = this.getConfig();
+		if(config.getString("minimumAccess").equalsIgnoreCase("Owner")) minimumAccess = 1;
+		if(config.getString("minimumAccess").equalsIgnoreCase("Trusted")) minimumAccess = 2;
+		if(config.getString("minimumAccess").equalsIgnoreCase("Member")) minimumAccess = 3;
+		maxPlotCooldowns = config.getInt("maxPlotCooldowns");
+		maxTime = config.getInt("maxTime");
+		minTime = config.getInt("minTime");
+	}
+	
+	public void setConfig() {
+		File f = new File(this.getDataFolder() + File.separator + "config.yml");
+		if (f.exists()) {
+			return;
+		}
+		FileConfiguration config = YamlConfiguration.loadConfiguration(f);
+		try (InputStream defConfigStream = this.getResource("config.yml");
+				InputStreamReader reader = new InputStreamReader(defConfigStream,StandardCharsets.UTF_8)){
+			FileConfiguration defconf = YamlConfiguration.loadConfiguration(reader);
+			config.addDefaults(defconf);
+			config.setDefaults(defconf);
+			this.saveDefaultConfig();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public void removeCooldownBlock(Block b) {

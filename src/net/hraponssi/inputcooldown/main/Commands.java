@@ -74,6 +74,11 @@ public class Commands implements CommandExecutor {
 							p.sendMessage(Lang.get("NOLONGERSETTER"));
 							return true;
 						}
+						if(num > plugin.maxTime || num < plugin.minTime) {
+							if(num > plugin.maxTime) p.sendMessage(Lang.get("MAXCOOLDOWNERROR", plugin.maxTime + "s"));
+							if(num < plugin.minTime) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.minTime + "s"));
+							return true;
+						}
 						if(args[1].equalsIgnoreCase("click")) {
 							plugin.setPlayer(p, num*20);
 							p.sendMessage(Lang.get("NOWSETTING", num + "s"));

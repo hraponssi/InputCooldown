@@ -24,3 +24,5 @@ Strings:
 - ADMINDISABLED:"%prefix% &cAdmin mode disabled."
 - RESETERTOGGLE:"%prefix% &aReset mode toggled %args%."
 - COOLDOWNRESET:"%prefix% &aCooldown of %args% reset!"
+- MINCOOLDOWNERROR:"%prefix% &cThat cooldown is below the minimum of %args%!"
+- MAXCOOLDOWNERROR:"%prefix% &cThat cooldown is above the maximum of %args%!"
