@@ -2,9 +2,8 @@
 
 #Minimum plot access level for setting input cooldowns
 #Options: Owner, Trusted, Member
-minimumAccess:Owner
+minimumAccess: Owner
 
-#Cooldown settings
-maxTime:3600
-minTime:3
-maxPlotCooldowns:-1
+maxTime: 3600
+minTime: 3
+maxPlotCooldowns: -1
