@@ -86,10 +86,14 @@ public class Commands implements CommandExecutor {
 							p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
 							plugin.setPlotPlayer(p, num*20);
 						}else if(args[1].equalsIgnoreCase("plot")) {
-							if(!utils.inOwnPlot(p)) {
+							if(utils.plotAccessLevel(p) > plugin.minimumAccess) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}
+			        		if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
+			        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
+			        			return true;
+			        		}
 							plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
 							p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
 						}
@@ -120,14 +124,14 @@ public class Commands implements CommandExecutor {
 				} else if(args[0].equalsIgnoreCase("list")) {
 					if(p.hasPermission("ic.user")) {
 						if(utils.getPlot(p) != null) {
-							if(utils.inOwnPlot(p)) {
-								String plotID = utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY();
-								p.sendMessage(Lang.get("PLOTCOOLDOWNLIST", plotID));
-								for(Entry<String, Integer> entry : plugin.getPlotCooldowns(plotID).entrySet()) {
-									p.sendMessage(ChatColor.GREEN + entry.getKey().toLowerCase() + ChatColor.GRAY +" - " + ChatColor.GREEN + entry.getValue()/20 + "s");
-								}
-							}else {
+							if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
+								return true;
+							}
+							String plotID = utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY();
+							p.sendMessage(Lang.get("PLOTCOOLDOWNLIST", plotID));
+							for(Entry<String, Integer> entry : plugin.getPlotCooldowns(plotID).entrySet()) {
+								p.sendMessage(ChatColor.GREEN + entry.getKey().toLowerCase() + ChatColor.GRAY +" - " + ChatColor.GREEN + entry.getValue()/20 + "s");
 							}
 						}else {
 							p.sendMessage(Lang.get("PLOTERROR"));
@@ -155,7 +159,7 @@ public class Commands implements CommandExecutor {
 				}
 			}else {
 				p.sendMessage("test running");
-				if(utils.inOwnPlot(p)) {
+				if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
 					p.sendMessage("you own that plot.");
 				}else {
 					p.sendMessage(Lang.get("PLOTACCESSERROR"));

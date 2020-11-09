@@ -97,6 +97,7 @@ public class Main extends JavaPlugin{
 	
 	public void reloadCfg() {
 		dataInterface.loadLang();
+		loadConfig();
 	}
 	
 	public void loadConfig() {
@@ -125,6 +126,10 @@ public class Main extends JavaPlugin{
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean inAdminMode(Player p) {
+		return admins.contains(p);
 	}
 	
 	public void removeCooldownBlock(Block b) {
@@ -207,6 +212,10 @@ public class Main extends JavaPlugin{
 		}
 		if(cooldownPlots.containsKey(id)) cooldowns.put("DEFAULT" , cooldownPlots.get(id));
 		return cooldowns;
+	}
+	
+	public int plotCooldownCount(String id) {
+		return getPlotCooldowns(id).size();
 	}
 	
 	public void cooldown(Block b, Player p) {

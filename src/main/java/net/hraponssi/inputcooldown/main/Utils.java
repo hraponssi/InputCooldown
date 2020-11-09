@@ -2,6 +2,8 @@ package net.hraponssi.inputcooldown.main;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +18,8 @@ import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import com.plotsquared.core.plot.PlotId;
 import com.plotsquared.core.plot.world.PlotAreaManager;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
 
@@ -44,6 +48,16 @@ public class Utils {
 		return false;
 	}
 	
+	public int plotAccessLevel(Player p) {
+		PlotPlayer<?> player = PlotPlayer.wrap(p);
+		Plot plot = player.getCurrentPlot();
+		UUID pUUID = p.getUniqueId();
+		if(inOwnPlot(p)) return 1;
+		if(plot.getTrusted().contains(pUUID)) return 2;
+		if(plot.getMembers().contains(pUUID)) return 3;
+		return 0;
+	}
+	
 	public PlotId getPlot(Player p) {
 		PlotPlayer<?> player = PlotPlayer.wrap(p);
 		Plot plot = player.getCurrentPlot();
@@ -57,6 +71,10 @@ public class Utils {
 		return pl.getPlot().getId();
 	}
 
+	public String toStringId(PlotId id) {
+		return id.getX() + ";" + id.getY();
+	}
+	
 	public boolean isInteger(String s) { //TODO dont acccept negative numbers
 		boolean isValidInteger = false;
 		try
