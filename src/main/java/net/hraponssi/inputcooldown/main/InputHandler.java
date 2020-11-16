@@ -25,7 +25,7 @@ public class InputHandler {
 	        if (utils.isInput(b.getType())) {
 	        	if(plugin.players.containsKey(p)) {
 	        		event.setCancelled(true);
-	        		if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
+	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
 	        		}
@@ -37,7 +37,7 @@ public class InputHandler {
 	        		plugin.addCooldownBlock(b, plugin.players.get(p));
 	        	}else if(plugin.plotPlayers.containsKey(p)) {
 	        		event.setCancelled(true);
-	        		if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
+	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
 	        		}

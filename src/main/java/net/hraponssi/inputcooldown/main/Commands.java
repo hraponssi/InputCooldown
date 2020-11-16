@@ -86,7 +86,7 @@ public class Commands implements CommandExecutor {
 							p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
 							plugin.setPlotPlayer(p, num*20);
 						}else if(args[1].equalsIgnoreCase("plot")) {
-							if(utils.plotAccessLevel(p) > plugin.minimumAccess) {
+							if(utils.plotAccessLevel(p) < plugin.minimumAccess) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}
@@ -124,7 +124,7 @@ public class Commands implements CommandExecutor {
 				} else if(args[0].equalsIgnoreCase("list")) {
 					if(p.hasPermission("ic.user")) {
 						if(utils.getPlot(p) != null) {
-							if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
+							if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}
@@ -159,7 +159,7 @@ public class Commands implements CommandExecutor {
 				}
 			}else {
 				p.sendMessage("test running");
-				if(utils.plotAccessLevel(p) > plugin.minimumAccess && !plugin.inAdminMode(p)) {
+				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
 					p.sendMessage("you own that plot.");
 				}else {
 					p.sendMessage(Lang.get("PLOTACCESSERROR"));

@@ -52,9 +52,10 @@ public class Utils {
 		PlotPlayer<?> player = PlotPlayer.wrap(p);
 		Plot plot = player.getCurrentPlot();
 		UUID pUUID = p.getUniqueId();
-		if(inOwnPlot(p)) return 1;
+		if(plot == null || player == null || pUUID == null) return 99;
+		if(inOwnPlot(p)) return 3;
 		if(plot.getTrusted().contains(pUUID)) return 2;
-		if(plot.getMembers().contains(pUUID)) return 3;
+		if(plot.getMembers().contains(pUUID)) return 1;
 		return 0;
 	}
 	

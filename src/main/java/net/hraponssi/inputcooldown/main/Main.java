@@ -103,9 +103,9 @@ public class Main extends JavaPlugin{
 	public void loadConfig() {
 		reloadConfig();
 		FileConfiguration config = this.getConfig();
-		if(config.getString("minimumAccess").equalsIgnoreCase("Owner")) minimumAccess = 1;
+		if(config.getString("minimumAccess").equalsIgnoreCase("Owner")) minimumAccess = 3;
 		if(config.getString("minimumAccess").equalsIgnoreCase("Trusted")) minimumAccess = 2;
-		if(config.getString("minimumAccess").equalsIgnoreCase("Member")) minimumAccess = 3;
+		if(config.getString("minimumAccess").equalsIgnoreCase("Member")) minimumAccess = 1;
 		maxPlotCooldowns = config.getInt("maxPlotCooldowns");
 		maxTime = config.getInt("maxTime");
 		minTime = config.getInt("minTime");
