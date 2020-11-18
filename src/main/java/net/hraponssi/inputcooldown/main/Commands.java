@@ -86,10 +86,12 @@ public class Commands implements CommandExecutor {
 							p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
 							plugin.setPlotPlayer(p, num*20);
 						}else if(args[1].equalsIgnoreCase("plot")) {
-							if(utils.plotAccessLevel(p) < plugin.minimumAccess) {
+							if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
-							}
+							}else if(plugin.inAdminMode(p)) {
+			        			p.sendMessage(Lang.get("ADMINBYPASS"));
+			        		}
 			        		if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
 			        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
 			        			return true;
@@ -127,7 +129,9 @@ public class Commands implements CommandExecutor {
 							if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
-							}
+							}else if(plugin.inAdminMode(p)) {
+			        			p.sendMessage(Lang.get("ADMINBYPASS"));
+			        		}
 							String plotID = utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY();
 							p.sendMessage(Lang.get("PLOTCOOLDOWNLIST", plotID));
 							for(Entry<String, Integer> entry : plugin.getPlotCooldowns(plotID).entrySet()) {

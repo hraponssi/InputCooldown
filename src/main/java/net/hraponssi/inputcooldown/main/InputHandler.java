@@ -28,6 +28,8 @@ public class InputHandler {
 	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
+	        		} else if(plugin.inAdminMode(p)) {
+	        			p.sendMessage(Lang.get("ADMINBYPASS"));
 	        		}
 	        		if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
 	        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
@@ -40,6 +42,8 @@ public class InputHandler {
 	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        			return;
+	        		} else if(plugin.inAdminMode(p)) {
+	        			p.sendMessage(Lang.get("ADMINBYPASS"));
 	        		}
 	        		if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
 	        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));

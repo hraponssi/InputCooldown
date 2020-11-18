@@ -7,3 +7,6 @@ minimumAccess: Owner
 maxTime: 3600
 minTime: 3
 maxPlotCooldowns: -1
+
+adminModeJoinMsg: true
+disableAdminOnQuit: false

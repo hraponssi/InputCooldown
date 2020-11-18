@@ -27,3 +27,4 @@ Strings:
 - MINCOOLDOWNERROR:"%prefix% &cThat cooldown is below the minimum of %args%!"
 - MAXCOOLDOWNERROR:"%prefix% &cThat cooldown is above the maximum of %args%!"
 - MAXCOOLDOWNCOUNT:"%prefix% &cThat plot has reached the max cooldown count of %args%!"
+- ADMINBYPASS:"%prefix% &eYou are bypassing restrictions through admin mode."

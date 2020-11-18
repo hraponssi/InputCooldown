@@ -48,6 +48,9 @@ public class Main extends JavaPlugin{
 	int minTime = 3;
 	int maxPlotCooldowns = -1;
 	
+	boolean adminJoinMsg = false;
+	boolean adminLeaveDisable = false;
+	
 	@Override
 	public void onDisable() {
 		dataInterface.saveData();
@@ -109,6 +112,8 @@ public class Main extends JavaPlugin{
 		maxPlotCooldowns = config.getInt("maxPlotCooldowns");
 		maxTime = config.getInt("maxTime");
 		minTime = config.getInt("minTime");
+		adminJoinMsg = config.getBoolean("adminModeJoinMsg");
+		adminLeaveDisable = config.getBoolean("disableAdminOnQuit");
 	}
 	
 	public void setConfig() {
