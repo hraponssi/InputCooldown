@@ -40,6 +40,7 @@ public class Main extends JavaPlugin{
 	
 	ArrayList<Player> checkers = new ArrayList<>();
 	ArrayList<Player> reseters = new ArrayList<>();
+	HashMap<Player, String> removers = new HashMap<>();
 	
 	//Config values
 	int minimumAccess = 1;
@@ -141,6 +142,14 @@ public class Main extends JavaPlugin{
 		if(cooldownBlocks.containsKey(b.getLocation())) cooldownBlocks.remove(b.getLocation());
 	}
 	
+	public void removeCooldownPlot(String id) {
+		if(cooldownPlots.containsKey(id)) cooldownPlots.remove(id);
+	}
+	
+	public void removeCooldownPlotBlock(String id, Material mat) {
+		cooldownPlotBlocks.remove(id + ":" + mat.name());
+	}
+	
 	public void resetCooldown(Block b) {
 		if(cooldowns.containsKey(b.getLocation())) cooldowns.remove(b.getLocation());
 	}
@@ -148,6 +157,18 @@ public class Main extends JavaPlugin{
 	public void removePlayer(Player p) {
 		if(players.containsKey(p)) players.remove(p);
 		if(plotPlayers.containsKey(p)) plotPlayers.remove(p);
+	}
+	
+	public void removeRemover(Player p) {
+		if(removers.containsKey(p)) removers.remove(p);
+	}
+	
+	public void setRemover(Player p, String type) {
+		if(!removers.containsKey(p)) {
+			removers.put(p, type);
+		}else {
+			removers.replace(p, type);
+		}
 	}
 	
 	public void setPlayer(Player p, int timeout) {

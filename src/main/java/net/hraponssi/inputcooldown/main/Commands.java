@@ -33,11 +33,39 @@ public class Commands implements CommandExecutor {
 			Player p = (Player) sender;
 			if(args.length>0) {
 				if(args[0].equalsIgnoreCase("remove")) { //TODO improve this
-					plugin.removePlayer(p);
-					p.sendMessage(Lang.get("NOLONGERSETTER"));
-					if(p.hasPermission("ic.admin")) {
+					if(p.hasPermission("ic.user")){
+						if(args.length>1) {
+							if(args[1].equalsIgnoreCase("click")) {
+								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								plugin.setRemover(p, "click");
+								p.sendMessage(Lang.get("REMOVERSET"));
+							}else if(args[1].equalsIgnoreCase("block")) {
+								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								p.sendMessage(Lang.get("REMOVERSETTYPE"));
+								plugin.setRemover(p, "block");
+							}else if(args[1].equalsIgnoreCase("plot")) {
+								if (utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+									p.sendMessage(Lang.get("PLOTACCESSERROR"));
+									return true;
+								} else if(plugin.inAdminMode(p)) {
+									p.sendMessage(Lang.get("ADMINBYPASS"));
+								}
+								if(!plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).containsKey(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY())) {
+									p.sendMessage(Lang.get("NOPLOTCOOLDOWN", "default"));
+								}
+								int num = plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).get("DEFAULT");
+								plugin.removeCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY());
+								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num + "s)"));
+							}else if(args[1].equalsIgnoreCase("cancel")) {
+								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								p.sendMessage(Lang.get("REMOVERUNSET"));
+							}
+						}else {
+							p.sendMessage(Lang.get("INVALIDFORMAT", "remove <click/block/plot/cancel>"));
+						}
 						return true;
 					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
 						return true;
 					}
 				} if(args[0].equalsIgnoreCase("reset")) {
@@ -55,7 +83,16 @@ public class Commands implements CommandExecutor {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 						return true;
 					}
-				} else if(args[0].equalsIgnoreCase("set")) { //TODO perm check
+				} else if(args[0].equalsIgnoreCase("unset")) {
+					if(p.hasPermission("ic.user")) {
+						plugin.removePlayer(p);
+						p.sendMessage(Lang.get("NOLONGERSETTER"));
+						return true;
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+						return true;
+					}
+				}else if(args[0].equalsIgnoreCase("set")) { //TODO perm check
 					if(args.length<2) {
 						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 						return true;
@@ -90,12 +127,12 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}else if(plugin.inAdminMode(p)) {
-			        			p.sendMessage(Lang.get("ADMINBYPASS"));
-			        		}
-			        		if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
-			        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
-			        			return true;
-			        		}
+								p.sendMessage(Lang.get("ADMINBYPASS"));
+							}
+							if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
+								p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
+								return true;
+							}
 							plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
 							p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
 						}
@@ -130,8 +167,8 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}else if(plugin.inAdminMode(p)) {
-			        			p.sendMessage(Lang.get("ADMINBYPASS"));
-			        		}
+								p.sendMessage(Lang.get("ADMINBYPASS"));
+							}
 							String plotID = utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY();
 							p.sendMessage(Lang.get("PLOTCOOLDOWNLIST", plotID));
 							for(Entry<String, Integer> entry : plugin.getPlotCooldowns(plotID).entrySet()) {
@@ -162,14 +199,22 @@ public class Commands implements CommandExecutor {
 					return true;
 				}
 			}else {
-				p.sendMessage("test running");
+				p.sendMessage(Lang.get("TITLE"));
+				p.sendMessage("remove");
+				p.sendMessage("reset");
+				p.sendMessage("unset");
+				p.sendMessage("set");
+				p.sendMessage("reload");
+				p.sendMessage("admin");
+				p.sendMessage("list");
+				p.sendMessage("check");
 				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
 					p.sendMessage("you own that plot.");
 				}else {
 					p.sendMessage(Lang.get("PLOTACCESSERROR"));
 				}
 				if(utils.getPlot(p) != null) {
-					p.sendMessage("plot id: " + utils.getPlot(p).x + "," + utils.getPlot(p).y);
+					p.sendMessage("plot id: " + utils.getPlot(p).getX() + "," + utils.getPlot(p).getY());
 				}else {
 					p.sendMessage("Invalid plot");
 				}

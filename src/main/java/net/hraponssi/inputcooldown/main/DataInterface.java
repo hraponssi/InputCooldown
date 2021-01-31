@@ -67,7 +67,11 @@ public class DataInterface {
 		for(String key: cb) {
 			String[] splitted = key.split(":");
 			String[] locsplitted = splitted[1].split("~");
-			plugin.addCooldownBlock(utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]), utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3])).getBlock(), utils.toInt(splitted[0]));
+			if(Bukkit.getWorld(locsplitted[3]) != null){
+				plugin.addCooldownBlock(utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]), utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3])).getBlock(), utils.toInt(splitted[0]));
+			}else {
+				plugin.getLogger().severe("Tried to load block cooldown in invalid world '"+ locsplitted[3] + "'");
+			}
 		}
 		List<String> cp = configManager.getData("data").getStringList("cooldownPlots");
 		for(String key: cp) {
