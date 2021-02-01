@@ -12,6 +12,10 @@ public class Lang {
 		return ChatColor.translateAlternateColorCodes('&',get("PREFIX"));
 	}
 	
+	public static String getChatPrefix() {
+		return ChatColor.translateAlternateColorCodes('&',get("CHATPREFIX"));
+	}
+	
 	public static String get(String name) {
 		if(langs.containsKey(name)) {
 			String msg = langs.get(name);

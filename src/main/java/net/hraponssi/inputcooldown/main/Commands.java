@@ -194,20 +194,32 @@ public class Commands implements CommandExecutor {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 					}
 					return true;
+				} else if(args[0].equalsIgnoreCase("debug")) {
+					if(p.hasPermission("ic.admin")) {
+						if(plugin.toggleDebug(p)) {
+							p.sendMessage(Lang.getChatPrefix() + ChatColor.YELLOW + " Debug enabled.");
+						}else {
+							p.sendMessage(Lang.getChatPrefix() + ChatColor.YELLOW + " Debug disabled.");
+						}
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+					}
+					return true;
 				} else {
 					p.sendMessage(Lang.get("INVALIDARGUMENTS"));
 					return true;
 				}
 			}else {
 				p.sendMessage(Lang.get("TITLE"));
-				p.sendMessage("remove");
-				p.sendMessage("reset");
-				p.sendMessage("unset");
-				p.sendMessage("set");
-				p.sendMessage("reload");
-				p.sendMessage("admin");
-				p.sendMessage("list");
-				p.sendMessage("check");
+				p.sendMessage(ChatColor.GREEN + "remove <>");
+				p.sendMessage(ChatColor.GREEN + "set <>");
+				p.sendMessage(ChatColor.GREEN + "unset");
+				p.sendMessage(ChatColor.GREEN + "reset");
+				p.sendMessage(ChatColor.GREEN + "list");
+				p.sendMessage(ChatColor.GREEN + "check");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "admin");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "reload");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "debug");
 				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
 					p.sendMessage("you own that plot.");
 				}else {

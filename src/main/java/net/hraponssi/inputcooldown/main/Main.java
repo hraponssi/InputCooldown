@@ -20,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.plotsquared.core.plot.PlotId;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class Main extends JavaPlugin{
 
 	ConfigManager configManager;
@@ -37,6 +39,7 @@ public class Main extends JavaPlugin{
 	HashMap<Player, Integer> plotPlayers = new HashMap<>();
 	
 	ArrayList<Player> admins = new ArrayList<>();
+	ArrayList<Player> debugers = new ArrayList<>();
 	
 	ArrayList<Player> checkers = new ArrayList<>();
 	ArrayList<Player> reseters = new ArrayList<>();
@@ -271,6 +274,23 @@ public class Main extends JavaPlugin{
 			admins.add(p);
 			return true;
 		}
+	}
+	
+	public boolean toggleDebug(Player p) {
+		if(debugers.contains(p)) {
+			debugers.remove(p);
+			return false;
+		}else {
+			debugers.add(p);
+			return true;
+		}
+	}
+	
+	public void debug(String msg, Player p) {
+		if(debugers.contains(p)) p.sendMessage(ChatColor.GRAY + "<"
+											+ ChatColor.YELLOW + "IC Debug"
+											+ ChatColor.GRAY + "> "
+											+ ChatColor.YELLOW + msg);
 	}
 	
 }

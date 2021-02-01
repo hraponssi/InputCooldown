@@ -73,27 +73,31 @@ public class InputHandler {
 	        	}else if(plugin.removers.containsKey(p)) {
 	        		if(plugin.isCooldown(b)) {
 	        			if(plugin.removers.get(p).equals("click")) {
-	        				if(utils.inOwnPlot(p)) {
-		        				plugin.removeCooldownBlock(b);
-		        				plugin.resetCooldown(b); //Make this configurable?
-		        				p.sendMessage(Lang.get("REMOVED", b.getX() + " " + b.getY() + " " + b.getZ() + " " + b.getType().toString() + " ("+plugin.getSetCooldown(b)+"s)"));
-		        			}else {
-		        				p.sendMessage(Lang.get("PLOTACCESSERROR"));
-		        			}
+	        				if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+	        					p.sendMessage(Lang.get("PLOTACCESSERROR"));
+	        					return;
+	        				} else if(plugin.inAdminMode(p)) {
+								p.sendMessage(Lang.get("ADMINBYPASS"));
+							}
+		        			plugin.removeCooldownBlock(b);
+		        			plugin.resetCooldown(b); //Make this configurable?
+		        			p.sendMessage(Lang.get("REMOVED", b.getX() + " " + b.getY() + " " + b.getZ() + " " + b.getType().toString() + " ("+plugin.getSetCooldown(b)+"s)"));
 	        			}else if(plugin.removers.get(p).equals("block")) {
-	        				if(utils.inOwnPlot(p)) {
-	        					String plotid = utils.getPlot(b.getLocation()).getX() + ";" + utils.getPlot(b.getLocation()).getY();
-	        					p.sendMessage(Lang.get("REMOVED", b.getX() + " " + b.getY() + " " + b.getZ() + " " + b.getType().toString() + " default ("+plugin.getSetCooldown(b)+"s)"));
-	        					plugin.removeCooldownPlotBlock(plotid, b.getType());
-		        			}else {
-		        				p.sendMessage(Lang.get("PLOTACCESSERROR"));
-		        			}
+	        				if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+	        					p.sendMessage(Lang.get("PLOTACCESSERROR"));
+	        					return;
+	        				}  else if(plugin.inAdminMode(p)) {
+								p.sendMessage(Lang.get("ADMINBYPASS"));
+							}
+	        				String plotid = utils.getPlot(b.getLocation()).getX() + ";" + utils.getPlot(b.getLocation()).getY();
+	        				p.sendMessage(Lang.get("REMOVED", b.getX() + " " + b.getY() + " " + b.getZ() + " " + b.getType().toString() + " default ("+plugin.getSetCooldown(b)+"s)"));
+	        				plugin.removeCooldownPlotBlock(plotid, b.getType());
 	        			}
 	        		}else {
 	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
 	        		}
 	        	}else {
-	        		p.sendMessage("input click");
+	        		plugin.debug("input click", p);
 		            if(plugin.hasCooldown(b)) {
 		            	event.setCancelled(true);
 		            	p.sendMessage(Lang.get("COOLDOWN",plugin.getCooldown(b) + "s"));
