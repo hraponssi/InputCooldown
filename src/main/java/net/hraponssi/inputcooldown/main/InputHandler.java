@@ -24,7 +24,7 @@ public class InputHandler {
 	    Block b = event.getClickedBlock();
 	    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 	        if (utils.isInput(b.getType())) {
-	        	if(plugin.players.containsKey(p)) {
+	        	if(plugin.players.containsKey(p.getUniqueId())) {
 	        		event.setCancelled(true);
 	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
@@ -36,10 +36,10 @@ public class InputHandler {
 	        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
 	        			return;
 	        		}
-	        		p.sendMessage(Lang.get("SETCOOLDOWN", plugin.players.get(p)/20 + "s"));
-	        		plugin.addCooldownBlock(b, plugin.players.get(p));
+	        		p.sendMessage(Lang.get("SETCOOLDOWN", plugin.players.get(p.getUniqueId())/20 + "s"));
+	        		plugin.addCooldownBlock(b, plugin.players.get(p.getUniqueId()));
 	        		plugin.resetCooldown(b); //Make this configurable?
-	        	}else if(plugin.plotPlayers.containsKey(p)) {
+	        	}else if(plugin.plotPlayers.containsKey(p.getUniqueId())) {
 	        		event.setCancelled(true);
 	        		if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
 	        			p.sendMessage(Lang.get("PLOTACCESSERROR"));
@@ -51,17 +51,22 @@ public class InputHandler {
 	        			p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
 	        			return;
 	        		}
-	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p)/20 + "s"));
+	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p.getUniqueId())/20 + "s"));
 	        		PlotId id = utils.getPlot(b.getLocation());
-	        		plugin.addCooldownPlotBlock(id.getX() + ";" + id.getY(), b.getType(), plugin.plotPlayers.get(p));
-	        	}else if(plugin.checkers.contains(p)){ //TODO update for non block specific cooldowns
+	        		plugin.addCooldownPlotBlock(id.getX() + ";" + id.getY(), b.getType(), plugin.plotPlayers.get(p.getUniqueId()));
+	        	}else if(plugin.checkers.contains(p.getUniqueId())){ //TODO update for non block specific cooldowns
+	        		PlotId id = utils.getPlot(b.getLocation());
 	        		if(plugin.isCooldown(b)) {
 	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s"));
+	        		}else if(plugin.hasCooldown(id.getX() + ";" + id.getY(), b.getType())){
+	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s " + "(" + "Plot, " + b.getType().name() + ")"));
+	        		}else if(plugin.hasCooldown(id.getX() + ";" + id.getY())){
+	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s " + "(" + "Plot" + ")"));
 	        		}else {
 	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
 	        		}
 	        		event.setCancelled(true);
-	        	}else if(plugin.reseters.contains(p)){
+	        	}else if(plugin.reseters.contains(p.getUniqueId())){
 	        		if(plugin.hasCooldown(b)) {
 	        			int time = plugin.getCooldown(b);
 	        			plugin.resetCooldown(b);
@@ -70,9 +75,9 @@ public class InputHandler {
 	        			p.sendMessage(Lang.get("NOCOOLDOWN"));
 	        		}
 	        		event.setCancelled(true);
-	        	}else if(plugin.removers.containsKey(p)) {
+	        	}else if(plugin.removers.containsKey(p.getUniqueId())) {
 	        		if(plugin.isCooldown(b)) {
-	        			if(plugin.removers.get(p).equals("click")) {
+	        			if(plugin.removers.get(p.getUniqueId()).equals("click")) {
 	        				if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
 	        					p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        					return;
@@ -82,7 +87,7 @@ public class InputHandler {
 		        			plugin.removeCooldownBlock(b);
 		        			plugin.resetCooldown(b); //Make this configurable?
 		        			p.sendMessage(Lang.get("REMOVED", b.getX() + " " + b.getY() + " " + b.getZ() + " " + b.getType().toString() + " ("+plugin.getSetCooldown(b)+"s)"));
-	        			}else if(plugin.removers.get(p).equals("block")) {
+	        			}else if(plugin.removers.get(p.getUniqueId()).equals("block")) {
 	        				if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
 	        					p.sendMessage(Lang.get("PLOTACCESSERROR"));
 	        					return;

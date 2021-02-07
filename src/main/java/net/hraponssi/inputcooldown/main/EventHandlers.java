@@ -33,7 +33,7 @@ public class EventHandlers implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if(plugin.adminJoinMsg) event.getPlayer().sendMessage(Lang.get("ADMINBYPASS"));
+		if(plugin.adminJoinMsg && plugin.inAdminMode(event.getPlayer())) event.getPlayer().sendMessage(Lang.get("ADMINBYPASS"));
 	}
 	
 	@EventHandler

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,15 +36,15 @@ public class Main extends JavaPlugin{
 	HashMap<String, Integer> cooldownPlotBlocks = new HashMap<>();
 	HashMap<Location, Cooldown> cooldowns = new HashMap<>();
 	
-	HashMap<Player, Integer> players = new HashMap<>();
-	HashMap<Player, Integer> plotPlayers = new HashMap<>();
+	HashMap<UUID, Integer> players = new HashMap<>();
+	HashMap<UUID, Integer> plotPlayers = new HashMap<>();
 	
-	ArrayList<Player> admins = new ArrayList<>();
-	ArrayList<Player> debugers = new ArrayList<>();
+	ArrayList<UUID> admins = new ArrayList<>();
+	ArrayList<UUID> debugers = new ArrayList<>();
 	
-	ArrayList<Player> checkers = new ArrayList<>();
-	ArrayList<Player> reseters = new ArrayList<>();
-	HashMap<Player, String> removers = new HashMap<>();
+	ArrayList<UUID> checkers = new ArrayList<>();
+	ArrayList<UUID> reseters = new ArrayList<>();
+	HashMap<UUID, String> removers = new HashMap<>();
 	
 	//Config values
 	int minimumAccess = 1;
@@ -138,7 +139,7 @@ public class Main extends JavaPlugin{
 	}
 	
 	public boolean inAdminMode(Player p) {
-		return admins.contains(p);
+		return admins.contains(p.getUniqueId());
 	}
 	
 	public void removeCooldownBlock(Block b) {
@@ -158,32 +159,32 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void removePlayer(Player p) {
-		if(players.containsKey(p)) players.remove(p);
-		if(plotPlayers.containsKey(p)) plotPlayers.remove(p);
+		if(players.containsKey(p.getUniqueId())) players.remove(p.getUniqueId());
+		if(plotPlayers.containsKey(p.getUniqueId())) plotPlayers.remove(p.getUniqueId());
 	}
 	
 	public void removeRemover(Player p) {
-		if(removers.containsKey(p)) removers.remove(p);
+		if(removers.containsKey(p.getUniqueId())) removers.remove(p.getUniqueId());
 	}
 	
 	public void setRemover(Player p, String type) {
-		if(!removers.containsKey(p)) {
-			removers.put(p, type);
+		if(!removers.containsKey(p.getUniqueId())) {
+			removers.put(p.getUniqueId(), type);
 		}else {
-			removers.replace(p, type);
+			removers.replace(p.getUniqueId(), type);
 		}
 	}
 	
 	public void setPlayer(Player p, int timeout) {
-		if(players.containsKey(p)) {
-			players.replace(p, timeout);
-		}else players.put(p, timeout);
+		if(players.containsKey(p.getUniqueId())) {
+			players.replace(p.getUniqueId(), timeout);
+		}else players.put(p.getUniqueId(), timeout);
 	}
 	
 	public void setPlotPlayer(Player p, int timeout) {
-		if(plotPlayers.containsKey(p)) {
-			plotPlayers.replace(p, timeout);
-		}else plotPlayers.put(p, timeout);
+		if(plotPlayers.containsKey(p.getUniqueId())) {
+			plotPlayers.replace(p.getUniqueId(), timeout);
+		}else plotPlayers.put(p.getUniqueId(), timeout);
 	}
 	
 	public void addCooldownBlock(Block b, int t) {
@@ -215,9 +216,13 @@ public class Main extends JavaPlugin{
 	}
 	
 	public Integer getSetCooldown(Block b) {
-		if(!cooldownBlocks.containsKey(b.getLocation())) return 0;
-		int cooldown = cooldownBlocks.get(b.getLocation());
-		return cooldown;
+		PlotId id = utils.getPlot(b.getLocation());
+		if(!cooldownBlocks.containsKey(b.getLocation()) && !cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name()) && !cooldownPlots.containsKey(id.getX() + ";" + id.getY())) return 0;
+		int cooldown = 0;
+		if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) cooldown = cooldownPlots.get(id.getX() + ";" + id.getY());
+		if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) cooldown = cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name());
+		if(cooldownBlocks.containsKey(b.getLocation())) cooldown = cooldownBlocks.get(b.getLocation());
+		return cooldown; //checks done in order of priority
 	}
 	
 	public Integer getCooldown(Block b) {
@@ -267,27 +272,27 @@ public class Main extends JavaPlugin{
 	}
 
 	public boolean toggleAdmin(Player p) {
-		if(admins.contains(p)) {
-			admins.remove(p);
+		if(admins.contains(p.getUniqueId())) {
+			admins.remove(p.getUniqueId());
 			return false;
 		}else {
-			admins.add(p);
+			admins.add(p.getUniqueId());
 			return true;
 		}
 	}
 	
 	public boolean toggleDebug(Player p) {
-		if(debugers.contains(p)) {
-			debugers.remove(p);
+		if(debugers.contains(p.getUniqueId())) {
+			debugers.remove(p.getUniqueId());
 			return false;
 		}else {
-			debugers.add(p);
+			debugers.add(p.getUniqueId());
 			return true;
 		}
 	}
 	
 	public void debug(String msg, Player p) {
-		if(debugers.contains(p)) p.sendMessage(ChatColor.GRAY + "<"
+		if(debugers.contains(p.getUniqueId())) p.sendMessage(ChatColor.GRAY + "<"
 											+ ChatColor.YELLOW + "IC Debug"
 											+ ChatColor.GRAY + "> "
 											+ ChatColor.YELLOW + msg);

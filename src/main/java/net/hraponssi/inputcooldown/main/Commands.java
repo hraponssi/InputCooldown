@@ -36,11 +36,11 @@ public class Commands implements CommandExecutor {
 					if(p.hasPermission("ic.user")){
 						if(args.length>1) {
 							if(args[1].equalsIgnoreCase("click")) {
-								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								plugin.setRemover(p, "click");
 								p.sendMessage(Lang.get("REMOVERSET"));
 							}else if(args[1].equalsIgnoreCase("block")) {
-								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								p.sendMessage(Lang.get("REMOVERSETTYPE"));
 								plugin.setRemover(p, "block");
 							}else if(args[1].equalsIgnoreCase("plot")) {
@@ -57,7 +57,7 @@ public class Commands implements CommandExecutor {
 								plugin.removeCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY());
 								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num + "s)"));
 							}else if(args[1].equalsIgnoreCase("cancel")) {
-								if(plugin.removers.containsKey(p)) plugin.removeRemover(p);
+								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								p.sendMessage(Lang.get("REMOVERUNSET"));
 							}
 						}else {
@@ -70,13 +70,13 @@ public class Commands implements CommandExecutor {
 					}
 				} if(args[0].equalsIgnoreCase("reset")) {
 					if(p.hasPermission("ic.user")) {
-						if(plugin.reseters.contains(p)) {
+						if(plugin.reseters.contains(p.getUniqueId())) {
 							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.RED + "off"));
-							plugin.reseters.remove(p);
+							plugin.reseters.remove(p.getUniqueId());
 							return true;
 						}else {
 							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.GREEN + "on"));
-							plugin.reseters.add(p);
+							plugin.reseters.add(p.getUniqueId());
 							return true;
 						}
 					}else {
@@ -183,11 +183,11 @@ public class Commands implements CommandExecutor {
 					return true;
 				} else if(args[0].equalsIgnoreCase("check")) {
 					if(p.hasPermission("ic.user")) {
-						if(!plugin.checkers.contains(p)) {
-							plugin.checkers.add(p);
+						if(!plugin.checkers.contains(p.getUniqueId())) {
+							plugin.checkers.add(p.getUniqueId());
 							p.sendMessage(Lang.get("CHECKINGCOOLDOWNS"));
 						}else {
-							plugin.checkers.remove(p);
+							plugin.checkers.remove(p.getUniqueId());
 							p.sendMessage(Lang.get("NOTCHECKINGCOOLDOWNS"));
 						}
 					}else {
@@ -211,15 +211,15 @@ public class Commands implements CommandExecutor {
 				}
 			}else {
 				p.sendMessage(Lang.get("TITLE"));
-				p.sendMessage(ChatColor.GREEN + "remove <>");
-				p.sendMessage(ChatColor.GREEN + "set <>");
-				p.sendMessage(ChatColor.GREEN + "unset");
-				p.sendMessage(ChatColor.GREEN + "reset");
-				p.sendMessage(ChatColor.GREEN + "list");
-				p.sendMessage(ChatColor.GREEN + "check");
-				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "admin");
-				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "reload");
-				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "debug");
+				p.sendMessage(ChatColor.GREEN + "/ic remove <> - Remove input cooldowns");
+				p.sendMessage(ChatColor.GREEN + "/ic set <> - Set input cooldowns");
+				p.sendMessage(ChatColor.GREEN + "/ic unset - Stop setting input cooldowns");
+				p.sendMessage(ChatColor.GREEN + "/ic reset - Reset input cooldowns");
+				p.sendMessage(ChatColor.GREEN + "/ic list - List input cooldowns on a plot");
+				p.sendMessage(ChatColor.GREEN + "/ic check - Check an input for a cooldown");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic admin - Toggle admin mode");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic reload - Reload the config & lang file");
+				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic debug - Toggle debug messages");
 				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
 					p.sendMessage("you own that plot.");
 				}else {

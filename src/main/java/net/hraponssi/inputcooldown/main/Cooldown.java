@@ -12,8 +12,7 @@ public class Cooldown {
 	}
 	Player user;
 	Location loc;
-	int age;
-	int time;
+	int age, time;
 	
 	
 }
