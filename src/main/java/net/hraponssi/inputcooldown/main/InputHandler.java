@@ -1,6 +1,5 @@
 package net.hraponssi.inputcooldown.main;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;

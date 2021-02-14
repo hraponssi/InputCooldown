@@ -2,7 +2,6 @@ package net.hraponssi.inputcooldown.main;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -11,15 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.plotsquared.core.PlotSquared;
-import com.plotsquared.core.api.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
-import com.plotsquared.core.plot.PlotArea;
 import com.plotsquared.core.plot.PlotId;
-import com.plotsquared.core.plot.world.PlotAreaManager;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
 

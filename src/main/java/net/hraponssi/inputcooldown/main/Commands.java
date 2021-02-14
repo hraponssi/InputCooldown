@@ -7,9 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.plotsquared.core.player.PlotPlayer;
-import com.plotsquared.core.plot.Plot;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class Commands implements CommandExecutor {
@@ -25,7 +22,8 @@ public class Commands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
-		if(command.equalsIgnoreCase("ic") || command.equalsIgnoreCase("inputcooldown")){
+		String scmd = cmd.getName();
+		if(scmd.equalsIgnoreCase("ic") || scmd.equalsIgnoreCase("inputcooldown")){
 			if(!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED + "Input cooldown commands can only be run by a player!");
 				return true;
