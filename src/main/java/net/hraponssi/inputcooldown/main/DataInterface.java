@@ -17,7 +17,7 @@ public class DataInterface {
 	public DataInterface(Main plugin, ConfigManager cManager) {
 		this.plugin = plugin;
 		this.configManager = cManager;
-		this.utils = new Utils();
+		this.utils = new Utils(plugin.pSquared);
 	}
 	
 	public void saveData() {

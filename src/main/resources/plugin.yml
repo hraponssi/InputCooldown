@@ -3,8 +3,7 @@ version: 1.0.0
 description: inputcooldown plugin
 author: Hraponssi
 main: net.hraponssi.inputcooldown.main.Main
-softdepend: [Multiverse-Core]
-depend: [PlotSquared]
+softdepend: [Multiverse-Core, PlotSquared]
 api-version: 1.16
 commands:
    ic:

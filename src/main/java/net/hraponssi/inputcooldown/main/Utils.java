@@ -16,6 +16,12 @@ import com.plotsquared.core.plot.PlotId;
 
 public class Utils {
 
+	boolean pSquared = false;
+	
+	public Utils(boolean p) {
+		this.pSquared = p;
+	}
+	
 	public final static Collection<Material> inputMaterials = new ArrayList<>();
 	static {
 		inputMaterials.add(Material.STONE_BUTTON);
@@ -31,7 +37,7 @@ public class Utils {
 		inputMaterials.add(Material.LEVER);
 	}
 
-	public boolean inOwnPlot(Player p) { //TODO add config option to choose allowing trusted or members to add
+	public boolean inOwnPlot(Player p) {
 		PlotPlayer<?> player = PlotPlayer.wrap(p);
 		Plot plot = player.getCurrentPlot();
 		if(plot == null) return false;
@@ -69,7 +75,7 @@ public class Utils {
 		return id.getX() + ";" + id.getY();
 	}
 	
-	public boolean isInteger(String s) { //TODO dont acccept negative numbers
+	public boolean isInteger(String s) {
 		boolean isValidInteger = false;
 		try
 		{

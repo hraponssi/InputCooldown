@@ -15,7 +15,7 @@ public class EventHandlers implements Listener {
 	public EventHandlers(Main plugin) {
 		super();
 		this.plugin = plugin;
-		this.utils = new Utils();
+		this.utils = new Utils(plugin.pSquared);
 		this.inputHandler = new InputHandler(plugin);
 	}
 	

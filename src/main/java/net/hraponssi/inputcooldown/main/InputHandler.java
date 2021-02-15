@@ -15,7 +15,7 @@ public class InputHandler {
 	public InputHandler(Main plugin) {
 		super();
 		this.plugin = plugin;
-		this.utils = new Utils();
+		this.utils = new Utils(plugin.pSquared);
 	}
 	
 	public void onPlayerInteract(PlayerInteractEvent event) {
@@ -53,7 +53,7 @@ public class InputHandler {
 	        		p.sendMessage(Lang.get("SETPLOTBLOCKCOOLDOWN", plugin.plotPlayers.get(p.getUniqueId())/20 + "s"));
 	        		PlotId id = utils.getPlot(b.getLocation());
 	        		plugin.addCooldownPlotBlock(id.getX() + ";" + id.getY(), b.getType(), plugin.plotPlayers.get(p.getUniqueId()));
-	        	}else if(plugin.checkers.contains(p.getUniqueId())){ //TODO update for non block specific cooldowns
+	        	}else if(plugin.checkers.contains(p.getUniqueId())){
 	        		PlotId id = utils.getPlot(b.getLocation());
 	        		if(plugin.isCooldown(b)) {
 	        			p.sendMessage(Lang.get("CHECKEDCOOLDOWN", plugin.getSetCooldown(b)/20 + "s"));

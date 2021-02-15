@@ -17,7 +17,7 @@ public class Commands implements CommandExecutor {
 	public Commands(Main plugin) {
 		super();
 		this.plugin = plugin;
-		this.utils = new Utils();
+		this.utils = new Utils(plugin.pSquared);
 	}
 
 	@Override
@@ -90,55 +90,60 @@ public class Commands implements CommandExecutor {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 						return true;
 					}
-				}else if(args[0].equalsIgnoreCase("set")) { //TODO perm check
-					if(args.length<2) {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
-						return true;
-					} else if(args.length<3) {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
-						return true;
-					}
-					if(!args[1].equalsIgnoreCase("click") && !args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("plot")) {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
-						return true;
-					}
-					if(utils.isInteger(args[2])) {
-						int num = Integer.parseInt(args[2]);
-						if(num == 0) {
-							plugin.removePlayer(p);
-							p.sendMessage(Lang.get("NOLONGERSETTER"));
+				}else if(args[0].equalsIgnoreCase("set")) {
+					if(p.hasPermission("ic.user")) {
+						if(args.length<2) {
+							p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+							return true;
+						} else if(args.length<3) {
+							p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 							return true;
 						}
-						if(num > plugin.maxTime || num < plugin.minTime) {
-							if(num > plugin.maxTime) p.sendMessage(Lang.get("MAXCOOLDOWNERROR", plugin.maxTime + "s"));
-							if(num < plugin.minTime) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.minTime + "s"));
+						if(!args[1].equalsIgnoreCase("click") && !args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("plot")) {
+							p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 							return true;
 						}
-						if(args[1].equalsIgnoreCase("click")) {
-							plugin.setPlayer(p, num*20);
-							p.sendMessage(Lang.get("NOWSETTING", num + "s"));
-						}else if(args[1].equalsIgnoreCase("block")) {
-							p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
-							plugin.setPlotPlayer(p, num*20);
-						}else if(args[1].equalsIgnoreCase("plot")) {
-							if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
-								p.sendMessage(Lang.get("PLOTACCESSERROR"));
-								return true;
-							}else if(plugin.inAdminMode(p)) {
-								p.sendMessage(Lang.get("ADMINBYPASS"));
-							}
-							if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
-								p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
+						if(utils.isInteger(args[2])) {
+							int num = Integer.parseInt(args[2]);
+							if(num == 0) {
+								plugin.removePlayer(p);
+								p.sendMessage(Lang.get("NOLONGERSETTER"));
 								return true;
 							}
-							plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
-							p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
+							if(num > plugin.maxTime || num < plugin.minTime) {
+								if(num > plugin.maxTime) p.sendMessage(Lang.get("MAXCOOLDOWNERROR", plugin.maxTime + "s"));
+								if(num < plugin.minTime) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.minTime + "s"));
+								return true;
+							}
+							if(args[1].equalsIgnoreCase("click")) {
+								plugin.setPlayer(p, num*20);
+								p.sendMessage(Lang.get("NOWSETTING", num + "s"));
+							}else if(args[1].equalsIgnoreCase("block")) {
+								p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
+								plugin.setPlotPlayer(p, num*20);
+							}else if(args[1].equalsIgnoreCase("plot")) {
+								if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+									p.sendMessage(Lang.get("PLOTACCESSERROR"));
+									return true;
+								}else if(plugin.inAdminMode(p)) {
+									p.sendMessage(Lang.get("ADMINBYPASS"));
+								}
+								if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
+									p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
+									return true;
+								}
+								plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
+								p.sendMessage(Lang.get("SETCOOLDOWN", num + "s"));
+							}
+						}else {
+							p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+							return true;
 						}
+						return true;
 					}else {
-						p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+						p.sendMessage(Lang.get("NOPERMISSION"));
 						return true;
 					}
-					return true;
 				} else if(args[0].equalsIgnoreCase("reload")) {
 					if(p.hasPermission("ic.reload")) {
 						plugin.reloadCfg();
@@ -218,15 +223,16 @@ public class Commands implements CommandExecutor {
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic admin - Toggle admin mode");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic reload - Reload the config & lang file");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic debug - Toggle debug messages");
+				plugin.debug("Debug plot info:", p);
 				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
-					p.sendMessage("you own that plot.");
+					plugin.debug(ChatColor.GREEN + "You can access this plot", p);
 				}else {
-					p.sendMessage(Lang.get("PLOTACCESSERROR"));
+					plugin.debug(ChatColor.RED + "You cannot access this plot", p);
 				}
 				if(utils.getPlot(p) != null) {
-					p.sendMessage("plot id: " + utils.getPlot(p).getX() + "," + utils.getPlot(p).getY());
+					plugin.debug("plot id: " + utils.getPlot(p).getX() + "," + utils.getPlot(p).getY(), p);
 				}else {
-					p.sendMessage("Invalid plot");
+					plugin.debug("That plot is invalid", p);
 				}
 				return true;
 			}

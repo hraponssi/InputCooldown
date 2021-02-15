@@ -24,12 +24,14 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin{
 
+	//Classes
 	ConfigManager configManager;
 	Commands commands;
 	EventHandlers eventHandlers;
 	DataInterface dataInterface;
 	Utils utils;
 	
+	//Data
 	HashMap<Location, Integer> cooldownBlocks = new HashMap<>();
 	HashMap<String, Integer> cooldownPlots = new HashMap<>();
 	HashMap<String, Integer> cooldownPlotBlocks = new HashMap<>();
@@ -55,6 +57,9 @@ public class Main extends JavaPlugin{
 	boolean adminJoinMsg = false;
 	boolean adminLeaveDisable = false;
 	
+	//Dependencies
+	boolean pSquared = false;
+	
 	@Override
 	public void onDisable() {
 		dataInterface.saveData();
@@ -62,11 +67,15 @@ public class Main extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
+		if(getServer().getPluginManager().getPlugin("PlotSquared").isEnabled()) {
+			pSquared = true;
+			getLogger().info("PlotSquared detected!");
+		}
 		configManager = new ConfigManager(this);
 		commands = new Commands(this);
 		eventHandlers = new EventHandlers(this);
 		dataInterface = new DataInterface(this, configManager);
-		utils = new Utils();
+		utils = new Utils(pSquared);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(eventHandlers, this);
 		getCommand("ic").setExecutor(commands);
@@ -215,11 +224,12 @@ public class Main extends JavaPlugin{
 	}
 	
 	public Integer getSetCooldown(Block b) {
-		PlotId id = utils.getPlot(b.getLocation());
-		if(!cooldownBlocks.containsKey(b.getLocation()) && !cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name()) && !cooldownPlots.containsKey(id.getX() + ";" + id.getY())) return 0;
 		int cooldown = 0;
-		if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) cooldown = cooldownPlots.get(id.getX() + ";" + id.getY());
-		if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) cooldown = cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name());
+		if(pSquared) {
+			PlotId id = utils.getPlot(b.getLocation());
+			if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) cooldown = cooldownPlots.get(id.getX() + ";" + id.getY());
+			if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) cooldown = cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name());
+		}
 		if(cooldownBlocks.containsKey(b.getLocation())) cooldown = cooldownBlocks.get(b.getLocation());
 		return cooldown; //checks done in order of priority
 	}
@@ -252,15 +262,21 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void cooldown(Block b, Player p) {
-		PlotId id = utils.getPlot(b.getLocation());
-		if(cooldownBlocks.containsKey(b.getLocation())) {
-			cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
-		}else if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) {
-			getLogger().info("Tried to cooldown block but only found plot material specific cooldown " + id.getX() + ";" + id.getY() + " " + b.getType().name());
-			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name()), b.getLocation(), p));
-		}else if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
-			getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
-			cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
+		if(pSquared) {
+			PlotId id = utils.getPlot(b.getLocation());
+			if(cooldownBlocks.containsKey(b.getLocation())) {
+				cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+			}else if(cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) {
+				getLogger().info("Tried to cooldown block but only found plot material specific cooldown " + id.getX() + ";" + id.getY() + " " + b.getType().name());
+				cooldowns.put(b.getLocation(), new Cooldown(cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name()), b.getLocation(), p));
+			}else if(cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
+				getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
+				cooldowns.put(b.getLocation(), new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
+			}
+		}else {
+			if(cooldownBlocks.containsKey(b.getLocation())) {
+				cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+			}
 		}
 	}
 	
