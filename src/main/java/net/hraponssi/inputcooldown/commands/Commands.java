@@ -1,4 +1,4 @@
-package net.hraponssi.inputcooldown.main;
+package net.hraponssi.inputcooldown.commands;
 
 import java.util.Map.Entry;
 
@@ -7,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import net.hraponssi.inputcooldown.main.Lang;
+import net.hraponssi.inputcooldown.main.Main;
+import net.hraponssi.inputcooldown.main.Utils;
 import net.md_5.bungee.api.ChatColor;
 
 public class Commands implements CommandExecutor {
@@ -17,7 +20,7 @@ public class Commands implements CommandExecutor {
 	public Commands(Main plugin) {
 		super();
 		this.plugin = plugin;
-		this.utils = new Utils(plugin.pSquared);
+		this.utils = new Utils(plugin.getPSquared());
 	}
 
 	@Override
@@ -34,15 +37,15 @@ public class Commands implements CommandExecutor {
 					if(p.hasPermission("ic.user")){
 						if(args.length>1) {
 							if(args[1].equalsIgnoreCase("click")) {
-								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								plugin.setRemover(p, "click");
 								p.sendMessage(Lang.get("REMOVERSET"));
 							}else if(args[1].equalsIgnoreCase("block")) {
-								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								p.sendMessage(Lang.get("REMOVERSETTYPE"));
 								plugin.setRemover(p, "block");
 							}else if(args[1].equalsIgnoreCase("plot")) {
-								if (utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+								if (utils.plotAccessLevel(p) < plugin.getMinimumAccess()  && !plugin.inAdminMode(p)) {
 									p.sendMessage(Lang.get("PLOTACCESSERROR"));
 									return true;
 								} else if(plugin.inAdminMode(p)) {
@@ -55,7 +58,7 @@ public class Commands implements CommandExecutor {
 								plugin.removeCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY());
 								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num + "s)"));
 							}else if(args[1].equalsIgnoreCase("cancel")) {
-								if(plugin.removers.containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								p.sendMessage(Lang.get("REMOVERUNSET"));
 							}
 						}else {
@@ -68,13 +71,13 @@ public class Commands implements CommandExecutor {
 					}
 				} if(args[0].equalsIgnoreCase("reset")) {
 					if(p.hasPermission("ic.user")) {
-						if(plugin.reseters.contains(p.getUniqueId())) {
+						if(plugin.getReseters().contains(p.getUniqueId())) {
 							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.RED + "off"));
-							plugin.reseters.remove(p.getUniqueId());
+							plugin.getReseters().remove(p.getUniqueId());
 							return true;
 						}else {
 							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.GREEN + "on"));
-							plugin.reseters.add(p.getUniqueId());
+							plugin.getReseters().add(p.getUniqueId());
 							return true;
 						}
 					}else {
@@ -110,9 +113,9 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(Lang.get("NOLONGERSETTER"));
 								return true;
 							}
-							if(num > plugin.maxTime || num < plugin.minTime) {
-								if(num > plugin.maxTime) p.sendMessage(Lang.get("MAXCOOLDOWNERROR", plugin.maxTime + "s"));
-								if(num < plugin.minTime) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.minTime + "s"));
+							if(num > plugin.getMaxTime() || num < plugin.getMinTime()) {
+								if(num > plugin.getMaxTime()) p.sendMessage(Lang.get("MAXCOOLDOWNERROR", plugin.getMaxTime() + "s"));
+								if(num < plugin.getMinTime()) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.getMinTime() + "s"));
 								return true;
 							}
 							if(args[1].equalsIgnoreCase("click")) {
@@ -122,14 +125,14 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
 								plugin.setPlotPlayer(p, num*20);
 							}else if(args[1].equalsIgnoreCase("plot")) {
-								if(utils.plotAccessLevel(p) < plugin.minimumAccess  && !plugin.inAdminMode(p)) {
+								if(utils.plotAccessLevel(p) < plugin.getMinimumAccess()  && !plugin.inAdminMode(p)) {
 									p.sendMessage(Lang.get("PLOTACCESSERROR"));
 									return true;
 								}else if(plugin.inAdminMode(p)) {
 									p.sendMessage(Lang.get("ADMINBYPASS"));
 								}
-								if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.maxPlotCooldowns && plugin.maxPlotCooldowns > -1) {
-									p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.maxPlotCooldowns));
+								if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.getMaxPlotCooldowns() && plugin.getMaxPlotCooldowns() > -1) {
+									p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.getMaxPlotCooldowns()));
 									return true;
 								}
 								plugin.addCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY(), num*20);
@@ -166,7 +169,7 @@ public class Commands implements CommandExecutor {
 				} else if(args[0].equalsIgnoreCase("list")) {
 					if(p.hasPermission("ic.user")) {
 						if(utils.getPlot(p) != null) {
-							if(utils.plotAccessLevel(p) < plugin.minimumAccess && !plugin.inAdminMode(p)) {
+							if(utils.plotAccessLevel(p) < plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
 								p.sendMessage(Lang.get("PLOTACCESSERROR"));
 								return true;
 							}else if(plugin.inAdminMode(p)) {
@@ -186,11 +189,11 @@ public class Commands implements CommandExecutor {
 					return true;
 				} else if(args[0].equalsIgnoreCase("check")) {
 					if(p.hasPermission("ic.user")) {
-						if(!plugin.checkers.contains(p.getUniqueId())) {
-							plugin.checkers.add(p.getUniqueId());
+						if(!plugin.getCheckers().contains(p.getUniqueId())) {
+							plugin.getCheckers().add(p.getUniqueId());
 							p.sendMessage(Lang.get("CHECKINGCOOLDOWNS"));
 						}else {
-							plugin.checkers.remove(p.getUniqueId());
+							plugin.getCheckers().remove(p.getUniqueId());
 							p.sendMessage(Lang.get("NOTCHECKINGCOOLDOWNS"));
 						}
 					}else {
@@ -224,7 +227,7 @@ public class Commands implements CommandExecutor {
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic reload - Reload the config & lang file");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic debug - Toggle debug messages");
 				plugin.debug("Debug plot info:", p);
-				if(utils.plotAccessLevel(p) >= plugin.minimumAccess && !plugin.inAdminMode(p)) {
+				if(utils.plotAccessLevel(p) >= plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
 					plugin.debug(ChatColor.GREEN + "You can access this plot", p);
 				}else {
 					plugin.debug(ChatColor.RED + "You cannot access this plot", p);

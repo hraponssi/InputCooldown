@@ -20,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.plotsquared.core.plot.PlotId;
 
+import net.hraponssi.inputcooldown.commands.Commands;
+import net.hraponssi.inputcooldown.events.EventHandlers;
 import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin{
@@ -167,32 +169,32 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void removePlayer(Player p) {
-		if(players.containsKey(p.getUniqueId())) players.remove(p.getUniqueId());
-		if(plotPlayers.containsKey(p.getUniqueId())) plotPlayers.remove(p.getUniqueId());
+		if(getPlayers().containsKey(p.getUniqueId())) getPlayers().remove(p.getUniqueId());
+		if(getPlotPlayers().containsKey(p.getUniqueId())) getPlotPlayers().remove(p.getUniqueId());
 	}
 	
 	public void removeRemover(Player p) {
-		if(removers.containsKey(p.getUniqueId())) removers.remove(p.getUniqueId());
+		if(getRemovers().containsKey(p.getUniqueId())) getRemovers().remove(p.getUniqueId());
 	}
 	
 	public void setRemover(Player p, String type) {
-		if(!removers.containsKey(p.getUniqueId())) {
-			removers.put(p.getUniqueId(), type);
+		if(!getRemovers().containsKey(p.getUniqueId())) {
+			getRemovers().put(p.getUniqueId(), type);
 		}else {
-			removers.replace(p.getUniqueId(), type);
+			getRemovers().replace(p.getUniqueId(), type);
 		}
 	}
 	
 	public void setPlayer(Player p, int timeout) {
-		if(players.containsKey(p.getUniqueId())) {
-			players.replace(p.getUniqueId(), timeout);
-		}else players.put(p.getUniqueId(), timeout);
+		if(getPlayers().containsKey(p.getUniqueId())) {
+			getPlayers().replace(p.getUniqueId(), timeout);
+		}else getPlayers().put(p.getUniqueId(), timeout);
 	}
 	
 	public void setPlotPlayer(Player p, int timeout) {
-		if(plotPlayers.containsKey(p.getUniqueId())) {
-			plotPlayers.replace(p.getUniqueId(), timeout);
-		}else plotPlayers.put(p.getUniqueId(), timeout);
+		if(getPlotPlayers().containsKey(p.getUniqueId())) {
+			getPlotPlayers().replace(p.getUniqueId(), timeout);
+		}else getPlotPlayers().put(p.getUniqueId(), timeout);
 	}
 	
 	public void addCooldownBlock(Block b, int t) {
@@ -311,6 +313,54 @@ public class Main extends JavaPlugin{
 											+ ChatColor.YELLOW + "IC Debug"
 											+ ChatColor.GRAY + "> "
 											+ ChatColor.YELLOW + msg);
+	}
+	
+	public boolean getPSquared() {
+		return pSquared;
+	}
+
+	public boolean getAdminJoinMsg() {
+		return adminJoinMsg;
+	}
+
+	public boolean getAdminLeaveDisable() {
+		return adminLeaveDisable;
+	}
+
+	public HashMap<UUID, String> getRemovers() {
+		return removers;
+	}
+
+	public int getMinimumAccess() {
+		return minimumAccess;
+	}
+
+	public ArrayList<UUID> getReseters() {
+		return reseters;
+	}
+
+	public int getMaxTime() {
+		return maxTime;
+	}
+
+	public int getMinTime() {
+		return minTime;
+	}
+
+	public int getMaxPlotCooldowns() {
+		return maxPlotCooldowns;
+	}
+
+	public ArrayList<UUID> getCheckers() {
+		return checkers;
+	}
+
+	public HashMap<UUID, Integer> getPlayers() {
+		return players;
+	}
+
+	public HashMap<UUID, Integer> getPlotPlayers() {
+		return plotPlayers;
 	}
 	
 }
