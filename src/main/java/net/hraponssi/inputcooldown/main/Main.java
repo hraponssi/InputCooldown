@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.plotsquared.core.plot.PlotId;
 
 import net.hraponssi.inputcooldown.commands.Commands;
+import net.hraponssi.inputcooldown.commands.completion.InputCooldownCompletion;
 import net.hraponssi.inputcooldown.events.EventHandlers;
 import net.md_5.bungee.api.ChatColor;
 
@@ -81,7 +82,9 @@ public class Main extends JavaPlugin{
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(eventHandlers, this);
 		getCommand("ic").setExecutor(commands);
+		getCommand("ic").setTabCompleter(new InputCooldownCompletion());
 		getCommand("inputcooldown").setExecutor(commands);
+		getCommand("inputcooldown").setTabCompleter(new InputCooldownCompletion());
 		configManager.setup();
 		dataInterface.loadLang();
 		setConfig();
