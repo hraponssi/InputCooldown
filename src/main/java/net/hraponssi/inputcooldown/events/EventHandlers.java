@@ -23,7 +23,7 @@ public class EventHandlers implements Listener {
 		this.inputHandler = new InputHandler(plugin);
 	}
 	
-	@EventHandler
+	@EventHandler (ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		inputHandler.onPlayerInteract(event);
 	}
