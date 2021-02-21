@@ -36,11 +36,16 @@ public class Commands implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("remove")) { //TODO improve this
 					if(p.hasPermission("ic.user")){
 						if(args.length>1) {
+							if(!args[1].equalsIgnoreCase("click") && !args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("plot") && !args[1].equalsIgnoreCase("cancel")) {
+								p.sendMessage(Lang.get("INVALIDFORMAT", "remove <click/block/plot/cancel>"));
+								return true;
+							}
 							if(args[1].equalsIgnoreCase("click")) {
 								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								plugin.setRemover(p, "click");
 								p.sendMessage(Lang.get("REMOVERSET"));
 							}else if(args[1].equalsIgnoreCase("block")) {
+								if(!plugin.getPSquared())
 								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
 								p.sendMessage(Lang.get("REMOVERSETTYPE"));
 								plugin.setRemover(p, "block");

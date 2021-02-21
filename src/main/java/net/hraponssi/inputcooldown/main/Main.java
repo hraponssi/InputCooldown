@@ -18,7 +18,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.plotsquared.core.api.PlotAPI;
+import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotId;
+import com.plotsquared.core.util.MainUtil;
 
 import net.hraponssi.inputcooldown.commands.Commands;
 import net.hraponssi.inputcooldown.commands.completion.InputCooldownCompletion;
@@ -96,24 +99,41 @@ public class Main extends JavaPlugin{
 		}, 1L);
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
-				scheduler();
+				scheduler(1);
 			}
 		}, 1L, 1L);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			public void run() {
+				scheduler(20);
+			}
+		}, 20L, 20L);
 	}
 	
-	public void scheduler() {
-		ArrayList<Location> removeList = new ArrayList<Location>();
-		for(Location l : cooldowns.keySet()) {
-			Cooldown cooldown = cooldowns.get(l);
-			if(!l.getWorld().isChunkLoaded(l.getBlockX()/16, l.getBlockZ()/16)) continue; //Checks if chunk isnt loaded without loading chunk
-			cooldown.age++;
-			if(cooldown.age>=cooldown.time) {
-				removeList.add(l);
-				continue;
+	public void scheduler(int time) {
+		if(time == 1) {
+			ArrayList<Location> removeList = new ArrayList<Location>();
+			for(Location l : cooldowns.keySet()) {
+				Cooldown cooldown = cooldowns.get(l);
+				if(!l.getWorld().isChunkLoaded(l.getBlockX()/16, l.getBlockZ()/16)) continue; //Checks if chunk isnt loaded without loading chunk
+				cooldown.age++;
+				if(cooldown.age>=cooldown.time) {
+					removeList.add(l);
+					continue;
+				}
+				cooldowns.replace(l, cooldown);
 			}
-			cooldowns.replace(l, cooldown);
+			for(Location l : removeList) cooldowns.remove(l);
+		}else if(time == 20) {
+			for(Location l : cooldownBlocks.keySet()){ //Removes block cooldowns for removed inputs
+				if(!utils.isInput(l.getBlock().getType())) cooldownBlocks.remove(l);
+			}
+			for(String id : cooldownPlots.keySet()){
+				if(!pSquared) continue;
+//				Plot plot = MainUtil.getPlotFromString(null, id, false);
+//				if(!plot.hasOwner()) cooldownPlots.remove(id);
+				//TODO Remove plot cooldowns for changed/removed owner?
+			}
 		}
-		for(Location l : removeList) cooldowns.remove(l);
 	}
 	
 	public void reloadCfg() {
