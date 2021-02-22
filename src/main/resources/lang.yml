@@ -33,4 +33,4 @@ Strings:
 - REMOVERSETTYPE:"%chatprefix% &aYou are now removing plot wide cooldowns by right clicking."
 - REMOVED:"%chatprefix% &aRemoved cooldown for %args%."
 - NOPLOTCOOLDOWN:"%chatprefix% &aThat plot has no %args% cooldown!"
-- TITLE:"&7< %prefix% &7>"
+- TITLE:"&7&m&l-------&7< %prefix% &7>&m&l-------"
