@@ -34,3 +34,4 @@ Strings:
 - REMOVED:"%chatprefix% &aRemoved cooldown for %args%."
 - NOPLOTCOOLDOWN:"%chatprefix% &aThat plot has no %args% cooldown!"
 - TITLE:"&7&m&l-------&7< %prefix% &7>&m&l-------"
+- UNSETWITHCMD:"&e&o# You can also stop setting a cooldown with /ic #"

@@ -63,6 +63,8 @@ public class Main extends JavaPlugin{
 	boolean adminJoinMsg = false;
 	boolean adminLeaveDisable = false;
 	
+	public boolean cmdUnset = true;
+	
 	//Dependencies
 	boolean pSquared = false;
 	
@@ -152,6 +154,7 @@ public class Main extends JavaPlugin{
 		minTime = config.getInt("minTime");
 		adminJoinMsg = config.getBoolean("adminModeJoinMsg");
 		adminLeaveDisable = config.getBoolean("disableAdminOnQuit");
+		cmdUnset = config.getBoolean("cmdUnset");
 	}
 	
 	public void setConfig() {

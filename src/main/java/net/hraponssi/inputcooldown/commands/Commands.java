@@ -238,6 +238,13 @@ public class Commands implements CommandExecutor {
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic admin " + ChatColor.GRAY + "- Toggle admin mode");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic reload " + ChatColor.GRAY + "- Reload the config & lang file");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic debug " + ChatColor.GRAY + "- Toggle debug messages");
+				if(plugin.cmdUnset) {
+					p.sendMessage(Lang.get("UNSETWITHCMD"));
+					if(plugin.getPlayers().containsKey(p.getUniqueId()) || plugin.getPlotPlayers().containsKey(p.getUniqueId())) {
+						plugin.removePlayer(p);
+						p.sendMessage(Lang.get("NOLONGERSETTER"));
+					}
+				}
 				plugin.debug("Debug plot info:", p);
 				if(utils.plotAccessLevel(p) >= plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
 					plugin.debug(ChatColor.GREEN + "You can access this plot", p);

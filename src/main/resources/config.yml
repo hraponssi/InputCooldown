@@ -10,3 +10,5 @@ maxPlotCooldowns: -1
 
 adminModeJoinMsg: true
 disableAdminOnQuit: false
+
+cmdUnset: true
