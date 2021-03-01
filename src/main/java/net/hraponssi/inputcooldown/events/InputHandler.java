@@ -106,9 +106,15 @@ public class InputHandler {
 	        		}
 	        	}else {
 	        		plugin.debug("input click", p);
+	        		boolean ownPlot = utils.inOwnPlot(p);
+	        		boolean bypassOwn = ownPlot && plugin.bypassOnOwnPlot;
+	        		boolean bypassAll = plugin.getBypassers().contains(p.getUniqueId()) && plugin.inAdminMode(p);
+	        		boolean bypassOn = ownPlot && plugin.getBypassers().contains(p.getUniqueId());
 		            if(plugin.hasCooldown(b)) {
 		            	event.setCancelled(true);
 		            	p.sendMessage(Lang.get("COOLDOWN",plugin.getCooldown(b) + "s"));
+		            }else if(bypassOwn || bypassAll || bypassOn){
+		            	
 		            }else {
 		            	plugin.cooldown(b, p);
 		            }

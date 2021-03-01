@@ -223,6 +223,23 @@ public class Commands implements CommandExecutor {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 					}
 					return true;
+				case "bypass":
+					if(p.hasPermission("ic.user")) {
+						if(plugin.bypassOnOwnPlot) {
+							p.sendMessage(Lang.get("ALREADYBYPASSING"));
+							return true;
+						}
+						if(!plugin.getBypassers().contains(p.getUniqueId())) {
+							plugin.addBypasser(p);
+							p.sendMessage(Lang.get("BYPASSINGOWNPLOT"));
+						}else {
+							plugin.removeBypasser(p);
+							p.sendMessage(Lang.get("NOTBYPASSINGOWNPLOT"));
+						}
+					}else {
+						p.sendMessage(Lang.get("NOPERMISSION"));
+					}
+					return true;
 				default:
 					p.sendMessage(Lang.get("INVALIDARGUMENTS"));
 					return true;
@@ -235,6 +252,9 @@ public class Commands implements CommandExecutor {
 				p.sendMessage(ChatColor.GREEN + "/ic reset " + ChatColor.GRAY + "- Reset input cooldowns");
 				p.sendMessage(ChatColor.GREEN + "/ic list " + ChatColor.GRAY + "- List input cooldowns on a plot");
 				p.sendMessage(ChatColor.GREEN + "/ic check " + ChatColor.GRAY + "- Check an input for a cooldown");
+				if(!plugin.bypassOnOwnPlot) {
+					p.sendMessage(ChatColor.GREEN + "/ic bypass " + ChatColor.GRAY + "- Bypass cooldowns on your plot");
+				}
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic admin " + ChatColor.GRAY + "- Toggle admin mode");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic reload " + ChatColor.GRAY + "- Reload the config & lang file");
 				if(p.hasPermission("ic.admin")) p.sendMessage(ChatColor.GREEN + "/ic debug " + ChatColor.GRAY + "- Toggle debug messages");

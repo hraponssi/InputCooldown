@@ -24,6 +24,7 @@ public class InputCooldownCompletion implements TabCompleter {
 			completions.add("list");
 			completions.add("check");
 			completions.add("help");
+			completions.add("bypass");
 			if(p.hasPermission("ic.admin")) completions.add("admin");
 			if(p.hasPermission("ic.admin")) completions.add("reload");
 			return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());

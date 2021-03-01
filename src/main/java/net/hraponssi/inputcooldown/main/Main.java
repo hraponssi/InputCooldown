@@ -49,6 +49,7 @@ public class Main extends JavaPlugin{
 	ArrayList<UUID> admins = new ArrayList<>();
 	ArrayList<UUID> debugers = new ArrayList<>();
 	
+	ArrayList<UUID> bypassers = new ArrayList<>();
 	ArrayList<UUID> checkers = new ArrayList<>();
 	ArrayList<UUID> reseters = new ArrayList<>();
 	HashMap<UUID, String> removers = new HashMap<>();
@@ -64,6 +65,8 @@ public class Main extends JavaPlugin{
 	boolean adminLeaveDisable = false;
 	
 	public boolean cmdUnset = true;
+	
+	public boolean bypassOnOwnPlot = false;
 	
 	//Dependencies
 	boolean pSquared = false;
@@ -155,6 +158,7 @@ public class Main extends JavaPlugin{
 		adminJoinMsg = config.getBoolean("adminModeJoinMsg");
 		adminLeaveDisable = config.getBoolean("disableAdminOnQuit");
 		cmdUnset = config.getBoolean("cmdUnset");
+		bypassOnOwnPlot = config.getBoolean("bypassOwnPlot");
 	}
 	
 	public void setConfig() {
@@ -172,6 +176,10 @@ public class Main extends JavaPlugin{
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public void upgradeConfig() {
+		//TODO upgrade config automatically
 	}
 	
 	public boolean inAdminMode(Player p) {
@@ -221,6 +229,14 @@ public class Main extends JavaPlugin{
 		if(getPlotPlayers().containsKey(p.getUniqueId())) {
 			getPlotPlayers().replace(p.getUniqueId(), timeout);
 		}else getPlotPlayers().put(p.getUniqueId(), timeout);
+	}
+	
+	public void addBypasser(Player p) {
+		bypassers.add(p.getUniqueId());
+	}
+	
+	public void removeBypasser(Player p) {
+		bypassers.remove(p.getUniqueId());
 	}
 	
 	public void addCooldownBlock(Block b, int t) {
@@ -387,6 +403,10 @@ public class Main extends JavaPlugin{
 
 	public HashMap<UUID, Integer> getPlotPlayers() {
 		return plotPlayers;
+	}
+
+	public ArrayList<UUID> getBypassers() {
+		return bypassers;
 	}
 	
 }

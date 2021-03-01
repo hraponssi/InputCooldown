@@ -3,6 +3,7 @@
 #Minimum plot access level for setting input cooldowns
 #Options: Owner, Trusted, Member
 minimumAccess: Owner
+bypassOwnPlot: true
 
 maxTime: 3600
 minTime: 3
@@ -12,3 +13,5 @@ adminModeJoinMsg: true
 disableAdminOnQuit: false
 
 cmdUnset: true
+
+cfgVersion: 1
