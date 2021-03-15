@@ -60,7 +60,7 @@ public class Commands implements CommandExecutor {
 								}
 								int num = plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).get("DEFAULT");
 								plugin.removeCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY());
-								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num + "s)"));
+								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num/20 + "s)"));
 								break;
 							case "cancel":
 								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
