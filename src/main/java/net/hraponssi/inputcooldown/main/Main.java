@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -82,6 +83,8 @@ public class Main extends JavaPlugin{
 			pSquared = true;
 			getLogger().info("PlotSquared detected!");
 		}
+		int pluginId = 10846; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
 		configManager = new ConfigManager(this);
 		commands = new Commands(this);
 		eventHandlers = new EventHandlers(this);

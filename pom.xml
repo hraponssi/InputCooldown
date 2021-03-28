@@ -4,7 +4,7 @@
 
 	<groupId>InputCooldown</groupId>
 	<artifactId>InputCooldown</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,6 +41,13 @@
 			<groupId>com.plotsquared</groupId>
 			<artifactId>PlotSquared-Core</artifactId>
 			<version>5.13.3</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit</artifactId>
+			<version>2.2.1</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	
@@ -52,8 +59,15 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
+			<resource>
+                <directory>${project.basedir}</directory>
+				<includes>
+					<include>LICENSE</include>
+					<include>README.md</include>
+				</includes>
+                <filtering>true</filtering>
+            </resource>
         </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +78,28 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-        </plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<relocations>
+						<relocation>
+							<pattern>org.bstats</pattern>
+							<shadedPattern>net.hraponssi.inputcooldown</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 	
 </project>
