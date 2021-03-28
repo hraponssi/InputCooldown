@@ -7,3 +7,7 @@ Set input cooldowns on buttons, levers, etc.
 Multiverse-core (makes sure worlds load before loading cooldowns/plugin, not necessary)
 
 Plotsquared - All plot access integration
+
+### Building ###
+
+This project uses maven. Build with "mvn"
