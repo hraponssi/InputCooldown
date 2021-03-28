@@ -83,7 +83,7 @@ public class Main extends JavaPlugin{
 			pSquared = true;
 			getLogger().info("PlotSquared detected!");
 		}
-		int pluginId = 10846; // <-- Replace with the id of your plugin!
+		int pluginId = 10846;
         Metrics metrics = new Metrics(this, pluginId);
 		configManager = new ConfigManager(this);
 		commands = new Commands(this);
