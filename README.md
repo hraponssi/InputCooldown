@@ -1,6 +1,6 @@
 # InputCooldown #
 
-Set input cooldowns on buttons, levers, etc.
+Set input cooldowns on buttons, levers, pressure plates, etc.
 
 ### Soft-depends ###
 

@@ -39,12 +39,12 @@ public class Commands implements CommandExecutor {
 						if(args.length>1) {
 							switch(args[1].toLowerCase()) {
 							case "click":
-								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								plugin.removePlayer(p);
 								plugin.setRemover(p, "click");
 								p.sendMessage(Lang.get("REMOVERSET"));
 								break;
 							case "block":
-								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								plugin.removePlayer(p);
 								p.sendMessage(Lang.get("REMOVERSETTYPE"));
 								plugin.setRemover(p, "block");
 								break;
@@ -55,15 +55,17 @@ public class Commands implements CommandExecutor {
 								} else if(plugin.inAdminMode(p)) {
 									p.sendMessage(Lang.get("ADMINBYPASS"));
 								}
-								if(!plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).containsKey(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY())) {
+								if(!plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).containsKey("DEFAULT")) {
 									p.sendMessage(Lang.get("NOPLOTCOOLDOWN", "default"));
+									return true;
 								}
+								plugin.removePlayer(p);
 								int num = plugin.getPlotCooldowns(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY()).get("DEFAULT");
 								plugin.removeCooldownPlot(utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY());
 								p.sendMessage(Lang.get("REMOVED", utils.getPlot(p).getX() + ";" + utils.getPlot(p).getY() + " Default (" + num/20 + "s)"));
 								break;
 							case "cancel":
-								if(plugin.getRemovers().containsKey(p.getUniqueId())) plugin.removeRemover(p);
+								plugin.removePlayer(p);
 								p.sendMessage(Lang.get("REMOVERUNSET"));
 								break;
 							default:
@@ -86,6 +88,7 @@ public class Commands implements CommandExecutor {
 							return true;
 						}else {
 							p.sendMessage(Lang.get("RESETERTOGGLE", ChatColor.GREEN + "on"));
+							plugin.removePlayer(p);
 							plugin.getReseters().add(p.getUniqueId());
 							return true;
 						}
@@ -93,6 +96,7 @@ public class Commands implements CommandExecutor {
 						p.sendMessage(Lang.get("NOPERMISSION"));
 						return true;
 					}
+				case "cancel":
 				case "unset":
 					if(p.hasPermission("ic.user")) {
 						plugin.removePlayer(p);
@@ -123,6 +127,7 @@ public class Commands implements CommandExecutor {
 								if(num < plugin.getMinTime()) p.sendMessage(Lang.get("MINCOOLDOWNERROR", plugin.getMinTime() + "s"));
 								return true;
 							}
+							plugin.removePlayer(p);
 							switch(args[1].toLowerCase()) {
 							case "click":
 								plugin.setPlayer(p, num*20);
@@ -202,6 +207,7 @@ public class Commands implements CommandExecutor {
 				case "check":
 					if(p.hasPermission("ic.user")) {
 						if(!plugin.getCheckers().contains(p.getUniqueId())) {
+							plugin.removePlayer(p);
 							plugin.getCheckers().add(p.getUniqueId());
 							p.sendMessage(Lang.get("CHECKINGCOOLDOWNS"));
 						}else {
@@ -248,7 +254,7 @@ public class Commands implements CommandExecutor {
 				p.sendMessage(Lang.get("TITLE"));
 				p.sendMessage(ChatColor.GREEN + "/ic remove <type> " + ChatColor.GRAY + "- Remove input cooldowns");
 				p.sendMessage(ChatColor.GREEN + "/ic set <type> <seconds> " + ChatColor.GRAY + "- Set input cooldowns");
-				p.sendMessage(ChatColor.GREEN + "/ic unset " + ChatColor.GRAY + "- Stop setting input cooldowns");
+				p.sendMessage(ChatColor.GREEN + "/ic unset/cancel " + ChatColor.GRAY + "- Cancel an action (setting, removing)");
 				p.sendMessage(ChatColor.GREEN + "/ic reset " + ChatColor.GRAY + "- Reset input cooldowns");
 				p.sendMessage(ChatColor.GREEN + "/ic list " + ChatColor.GRAY + "- List input cooldowns on a plot");
 				p.sendMessage(ChatColor.GREEN + "/ic check " + ChatColor.GRAY + "- Check an input for a cooldown");

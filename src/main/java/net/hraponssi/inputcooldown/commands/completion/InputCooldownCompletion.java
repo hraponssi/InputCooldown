@@ -20,6 +20,7 @@ public class InputCooldownCompletion implements TabCompleter {
 			completions.add("remove");
 			completions.add("set");
 			completions.add("unset");
+			completions.add("cancel");
 			completions.add("reset");
 			completions.add("list");
 			completions.add("check");
@@ -33,6 +34,11 @@ public class InputCooldownCompletion implements TabCompleter {
 				completions.add("click");
 				completions.add("block");
 				completions.add("plot");
+			} else if(args[0].equalsIgnoreCase("remove")) {
+				completions.add("click");
+				completions.add("block");
+				completions.add("plot");
+				completions.add("cancel");
 			}
 			return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
 		}

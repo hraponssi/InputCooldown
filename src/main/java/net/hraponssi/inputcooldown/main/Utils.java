@@ -35,6 +35,18 @@ public class Utils {
 		inputMaterials.add(Material.WARPED_BUTTON);
 		inputMaterials.add(Material.CRIMSON_BUTTON);
 		inputMaterials.add(Material.LEVER);
+		inputMaterials.add(Material.ACACIA_PRESSURE_PLATE);
+		inputMaterials.add(Material.BIRCH_PRESSURE_PLATE);
+		inputMaterials.add(Material.CRIMSON_PRESSURE_PLATE);
+		inputMaterials.add(Material.DARK_OAK_PRESSURE_PLATE);
+		inputMaterials.add(Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
+		inputMaterials.add(Material.JUNGLE_PRESSURE_PLATE);
+		inputMaterials.add(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+		inputMaterials.add(Material.OAK_PRESSURE_PLATE);
+		inputMaterials.add(Material.POLISHED_BLACKSTONE_PRESSURE_PLATE);
+		inputMaterials.add(Material.SPRUCE_PRESSURE_PLATE);
+		inputMaterials.add(Material.STONE_PRESSURE_PLATE);
+		inputMaterials.add(Material.WARPED_PRESSURE_PLATE);
 	}
 
 	public boolean inOwnPlot(Player p) {

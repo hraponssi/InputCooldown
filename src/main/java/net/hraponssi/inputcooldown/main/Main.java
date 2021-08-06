@@ -19,10 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.plotsquared.core.api.PlotAPI;
-import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotId;
-import com.plotsquared.core.util.MainUtil;
 
 import net.hraponssi.inputcooldown.commands.Commands;
 import net.hraponssi.inputcooldown.commands.completion.InputCooldownCompletion;
@@ -54,6 +51,8 @@ public class Main extends JavaPlugin{
 	ArrayList<UUID> checkers = new ArrayList<>();
 	ArrayList<UUID> reseters = new ArrayList<>();
 	HashMap<UUID, String> removers = new HashMap<>();
+	
+	HashMap<String, Integer> msgCooldowns = new HashMap<>();
 	
 	//Config values
 	int minimumAccess = 1;
@@ -119,7 +118,7 @@ public class Main extends JavaPlugin{
 	
 	public void scheduler(int time) {
 		if(time == 1) {
-			ArrayList<Location> removeList = new ArrayList<Location>();
+			ArrayList<Location> removeList = new ArrayList<>();
 			for(Location l : cooldowns.keySet()) {
 				Cooldown cooldown = cooldowns.get(l);
 				if(!l.getWorld().isChunkLoaded(l.getBlockX()/16, l.getBlockZ()/16)) continue; //Checks if chunk isnt loaded without loading chunk
@@ -131,6 +130,17 @@ public class Main extends JavaPlugin{
 				cooldowns.replace(l, cooldown);
 			}
 			for(Location l : removeList) cooldowns.remove(l);
+			ArrayList<String> msgRemoveList = new ArrayList<>();
+			for(String k : msgCooldowns.keySet()) {
+				int cooldown = msgCooldowns.get(k);
+				cooldown--;
+				if(cooldown<=0) {
+					msgRemoveList.add(k);
+					continue;
+				}
+				msgCooldowns.replace(k, cooldown);
+			}
+			for(String l : msgRemoveList) msgCooldowns.remove(l);
 		}else if(time == 20) {
 			for(Location l : cooldownBlocks.keySet()){ //Removes block cooldowns for removed inputs
 				if(!utils.isInput(l.getBlock().getType())) cooldownBlocks.remove(l);
@@ -185,6 +195,16 @@ public class Main extends JavaPlugin{
 		//TODO upgrade config automatically
 	}
 	
+	public boolean msgCooldown(Player p, Location l) {
+		String key = p.getUniqueId().toString()+l.getBlockX()+l.getBlockY()+l.getBlockZ()+l.getWorld().getName(); //uuid + xyz + name
+		if(msgCooldowns.containsKey(key)) {
+			return true;
+		}else {
+			msgCooldowns.put(key, 20); //cooldown for messages set here
+			return false;
+		}
+	}
+	
 	public boolean inAdminMode(Player p) {
 		return admins.contains(p.getUniqueId());
 	}
@@ -205,9 +225,12 @@ public class Main extends JavaPlugin{
 		if(cooldowns.containsKey(b.getLocation())) cooldowns.remove(b.getLocation());
 	}
 	
-	public void removePlayer(Player p) {
+	public void removePlayer(Player p) { //Remove player from every state
 		if(getPlayers().containsKey(p.getUniqueId())) getPlayers().remove(p.getUniqueId());
 		if(getPlotPlayers().containsKey(p.getUniqueId())) getPlotPlayers().remove(p.getUniqueId());
+		if(reseters.contains(p.getUniqueId())) reseters.remove(p.getUniqueId());
+		if(checkers.contains(p.getUniqueId())) checkers.remove(p.getUniqueId());
+		if(removers.containsKey(p.getUniqueId())) removers.remove(p.getUniqueId());
 	}
 	
 	public void removeRemover(Player p) {
@@ -256,6 +279,11 @@ public class Main extends JavaPlugin{
 	
 	public boolean isCooldown(Block b) {
 		return cooldownBlocks.containsKey(b.getLocation());
+	}
+	
+	public boolean isBlockCooldown(Block b) {
+		PlotId id = utils.getPlot(b.getLocation());
+		return hasCooldown(id.getX() + ";" + id.getY(), b.getType());
 	}
 	
 	public boolean hasCooldown(Block b) {

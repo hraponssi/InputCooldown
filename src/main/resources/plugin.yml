@@ -1,10 +1,10 @@
 name: Inputcooldown
-version: 1.0.2
+version: 1.1.0
 description: inputcooldown plugin
 author: Hraponssi
 main: net.hraponssi.inputcooldown.main.Main
 softdepend: [Multiverse-Core, PlotSquared]
-api-version: 1.16
+api-version: 1.17
 commands:
    ic:
       description: manage input cooldowns
@@ -17,7 +17,7 @@ commands:
 permissions:
   ic.*:
     description: Gives access to all commands for managing input cooldowns
-    default: false
+    default: op
     children:
       ic.user: true
       ic.admin: true
@@ -27,7 +27,7 @@ permissions:
     default: true
   ic.admin:
     description: Allows you to control all cooldowns
-    default: false
+    default: op
   ic.reload:
     description: Allows you to reload the config
-    default: false
+    default: op

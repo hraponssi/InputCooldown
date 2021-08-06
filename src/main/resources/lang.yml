@@ -2,7 +2,7 @@
 Strings:
 - PREFIX:"&aInput&eCooldown"
 - CHATPREFIX:"%prefix% &7>"
-- NOLONGERSETTER:"%chatprefix% &aYou are no longer setting a cooldown."
+- NOLONGERSETTER:"%chatprefix% &aYou are no longer editing cooldowns."
 - INVALIDFORMAT:"%chatprefix% &cInvalid format, use %args%!"
 - NOWSETTING:"%chatprefix% &aYou are now setting a cooldown of %args%."
 - PLOTACCESSERROR:"%chatprefix% &cYou can't set cooldowns on that plot!"
