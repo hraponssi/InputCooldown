@@ -6,7 +6,7 @@ Set input cooldowns on buttons, levers, pressure plates, etc.
 
 Multiverse-core (makes sure worlds load before loading cooldowns/plugin, not necessary)
 
-Plotsquared - All plot access integration
+Plotsquared v6 - All plot access integration
 
 ### Building ###
 

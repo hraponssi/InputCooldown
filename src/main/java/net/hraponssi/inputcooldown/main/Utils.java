@@ -10,9 +10,11 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotId;
+import com.sk89q.worldedit.math.BlockVector3;
 
 public class Utils {
 
@@ -50,7 +52,7 @@ public class Utils {
 	}
 
 	public boolean inOwnPlot(Player p) {
-		PlotPlayer<?> player = PlotPlayer.wrap(p);
+		PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
 		Plot plot = player.getCurrentPlot();
 		if(plot == null) return false;
 		if(plot.hasOwner()) if(plot.getOwner().equals(p.getUniqueId())) {
@@ -60,7 +62,7 @@ public class Utils {
 	}
 	
 	public int plotAccessLevel(Player p) {
-		PlotPlayer<?> player = PlotPlayer.wrap(p);
+		PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
 		Plot plot = player.getCurrentPlot();
 		UUID pUUID = p.getUniqueId();
 		if(plot == null || player == null || pUUID == null) return 99;
@@ -71,14 +73,14 @@ public class Utils {
 	}
 	
 	public PlotId getPlot(Player p) {
-		PlotPlayer<?> player = PlotPlayer.wrap(p);
+		PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
 		Plot plot = player.getCurrentPlot();
 		if(plot == null) return null;
 		return plot.getId();
 	}
 	
 	public PlotId getPlot(Location l) {
-		com.plotsquared.core.location.Location pl = new com.plotsquared.core.location.Location(l.getWorld().getName(),l.getBlockX(),l.getBlockY(),l.getBlockZ());
+		com.plotsquared.core.location.Location pl = com.plotsquared.core.location.Location.at(l.getWorld().getName(),BlockVector3.at(l.getBlockX(),l.getBlockY(),l.getBlockZ()));
 		if(pl.getPlot() == null) return null;
 		return pl.getPlot().getId();
 	}
