@@ -28,6 +28,7 @@ public class DataInterface {
 			int time = plugin.cooldownBlocks.get(loc);
 			cb.add(time +  ":" +  loc.getBlockX() + "~"  + loc.getBlockY() +"~"+  loc.getBlockZ() +"~"+  loc.getWorld().getName());
 		}
+		
 		List<String> cp = configManager.getData("data").getStringList("cooldownPlots");
 		configManager.getData("data").set("cooldownPlots", cp);
 		cp.clear();
@@ -39,6 +40,7 @@ public class DataInterface {
 			int time = plugin.cooldownPlotBlocks.get(id);
 			cp.add(id + "~"  + time);
 		}
+		
 		List<String> cbs = configManager.getData("data").getStringList("cooldownBlockSaves");
 		configManager.getData("data").set("cooldownBlockSaves", cbs);
 		cbs.clear();
@@ -47,6 +49,7 @@ public class DataInterface {
 			String stringLoc = loc.getBlockX() + "~"  + loc.getBlockY() +"~"+  loc.getBlockZ() +"~"+  loc.getWorld().getName();
 			cbs.add(cooldown.time + "~" + cooldown.age + ":" +  stringLoc + ":" + cooldown.user.getUniqueId().toString());
 		}
+		
 		configManager.saveData();
 	}
 	
@@ -60,6 +63,7 @@ public class DataInterface {
 			UUID uuid = UUID.fromString(splitted[2]);
 			plugin.addCooldown(loc.getBlock(), Bukkit.getOfflinePlayer(uuid).getPlayer(), utils.toInt(timesplitted[0]), utils.toInt(timesplitted[1]));
 		}
+		
 		List<String> cb = configManager.getData("data").getStringList("cooldownBlocks");
 		for(String key: cb) {
 			String[] splitted = key.split(":");
@@ -70,6 +74,7 @@ public class DataInterface {
 				plugin.getLogger().severe("Tried to load block cooldown in invalid world '"+ locsplitted[3] + "'");
 			}
 		}
+		
 		List<String> cp = configManager.getData("data").getStringList("cooldownPlots");
 		for(String key: cp) {
 			String[] splitted = key.split(":");
@@ -88,7 +93,7 @@ public class DataInterface {
 		}
 	}
 	
-	public String read(String s) {
+	public String read(String s) { //Removes quotes around the strings
 		if(s == null) {
 			plugin.getLogger().warning("Tried to read null lang string");
 			return "";

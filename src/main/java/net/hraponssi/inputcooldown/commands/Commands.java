@@ -115,8 +115,23 @@ public class Commands implements CommandExecutor {
 							p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
 							return true;
 						}
-						if(utils.isInteger(args[2])) {
-							int num = Integer.parseInt(args[2]);
+						if(utils.isInteger(args[2]) || (args[2].length() >= 2 && utils.isInteger(args[2].substring(0, args[2].length()-1)))) {
+							int num = -1;
+							if (args[2].length() >= 2 && utils.isInteger(args[2].substring(0, args[2].length()-1)) && !utils.isInteger(args[2])) {
+								String multiplier = args[2].substring(args[2].length()-1, args[2].length());
+								if(multiplier.equals("s")) { //seconds
+									num = Integer.parseInt(args[2].substring(0, args[2].length()-1))*1;
+								} else if(multiplier.equals("m")) { //minutes
+									num = Integer.parseInt(args[2].substring(0, args[2].length()-1))*60;
+								} else if(multiplier.equals("h")) { //hours
+									num = Integer.parseInt(args[2].substring(0, args[2].length()-1))*3600;
+								} else { //invalid
+									p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
+									return true;
+								}
+							}else {
+								num = Integer.parseInt(args[2]);
+							}
 							if(num == 0) {
 								plugin.removePlayer(p);
 								p.sendMessage(Lang.get("NOLONGERSETTER"));
