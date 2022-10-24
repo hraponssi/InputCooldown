@@ -24,31 +24,11 @@ public class Utils {
 		this.pSquared = p;
 	}
 	
-	public final static Collection<Material> inputMaterials = new ArrayList<>();
+	public final static Collection<String> inputEnds = new ArrayList<>();
 	static {
-		inputMaterials.add(Material.STONE_BUTTON);
-		inputMaterials.add(Material.POLISHED_BLACKSTONE_BUTTON);
-		inputMaterials.add(Material.OAK_BUTTON);
-		inputMaterials.add(Material.BIRCH_BUTTON);
-		inputMaterials.add(Material.JUNGLE_BUTTON);
-		inputMaterials.add(Material.SPRUCE_BUTTON);
-		inputMaterials.add(Material.DARK_OAK_BUTTON);
-		inputMaterials.add(Material.ACACIA_BUTTON);
-		inputMaterials.add(Material.WARPED_BUTTON);
-		inputMaterials.add(Material.CRIMSON_BUTTON);
-		inputMaterials.add(Material.LEVER);
-		inputMaterials.add(Material.ACACIA_PRESSURE_PLATE);
-		inputMaterials.add(Material.BIRCH_PRESSURE_PLATE);
-		inputMaterials.add(Material.CRIMSON_PRESSURE_PLATE);
-		inputMaterials.add(Material.DARK_OAK_PRESSURE_PLATE);
-		inputMaterials.add(Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
-		inputMaterials.add(Material.JUNGLE_PRESSURE_PLATE);
-		inputMaterials.add(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
-		inputMaterials.add(Material.OAK_PRESSURE_PLATE);
-		inputMaterials.add(Material.POLISHED_BLACKSTONE_PRESSURE_PLATE);
-		inputMaterials.add(Material.SPRUCE_PRESSURE_PLATE);
-		inputMaterials.add(Material.STONE_PRESSURE_PLATE);
-		inputMaterials.add(Material.WARPED_PRESSURE_PLATE);
+		inputEnds.add("_button");
+		inputEnds.add("_plate");
+		inputEnds.add("_pressure_plate");
 	}
 
 	public boolean inOwnPlot(Player p) {
@@ -104,7 +84,12 @@ public class Utils {
 	}
 
 	public boolean isInput(Material mat) {
-		return inputMaterials.contains(mat);
+		boolean input = false;
+		if(mat.name().toLowerCase() == "lever") input = true;
+		for(String ending : inputEnds) {
+			if(mat.name().toLowerCase().endsWith(ending)) input = true;	
+		}
+		return input;
 	}
 
 	public int toInt(String s) {
