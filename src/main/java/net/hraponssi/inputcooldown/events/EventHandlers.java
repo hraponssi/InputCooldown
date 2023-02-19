@@ -12,30 +12,34 @@ import net.hraponssi.inputcooldown.main.Utils;
 
 public class EventHandlers implements Listener {
 
-	Main plugin;
-	Utils utils;
-	InputHandler inputHandler;
-	
-	public EventHandlers(Main plugin) {
-		super();
-		this.plugin = plugin;
-		this.utils = new Utils(plugin.getPSquared());
-		this.inputHandler = new InputHandler(plugin);
-	}
-	
-	@EventHandler (ignoreCancelled = true)
-	public void onPlayerInteract(PlayerInteractEvent event) {
-		inputHandler.onPlayerInteract(event);
-	}
-	
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		if(plugin.getAdminJoinMsg() && plugin.inAdminMode(event.getPlayer())) event.getPlayer().sendMessage(Lang.get("ADMINBYPASS"));
-	}
-	
-	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent event) {
-		if(plugin.getAdminLeaveDisable() && plugin.inAdminMode(event.getPlayer())) plugin.toggleAdmin(event.getPlayer()); 
-	}
-	
+    Main plugin;
+    Utils utils;
+    InputHandler inputHandler;
+
+    public EventHandlers(Main plugin) {
+        super();
+        this.plugin = plugin;
+        this.utils = new Utils(plugin.getPSquared());
+        this.inputHandler = new InputHandler(plugin);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        inputHandler.onPlayerInteract(event);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (plugin.getAdminJoinMsg() && plugin.inAdminMode(event.getPlayer())) {
+            event.getPlayer().sendMessage(Lang.get("ADMINBYPASS"));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        if (plugin.getAdminLeaveDisable() && plugin.inAdminMode(event.getPlayer())) {
+            plugin.toggleAdmin(event.getPlayer());
+        }
+    }
+
 }

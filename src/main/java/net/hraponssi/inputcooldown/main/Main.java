@@ -252,13 +252,17 @@ public class Main extends JavaPlugin {
     public void setPlayer(Player p, int timeout) {
         if (getPlayers().containsKey(p.getUniqueId())) {
             getPlayers().replace(p.getUniqueId(), timeout);
-        } else getPlayers().put(p.getUniqueId(), timeout);
+        } else {
+            getPlayers().put(p.getUniqueId(), timeout);
+        }
     }
 
     public void setPlotPlayer(Player p, int timeout) {
         if (getPlotPlayers().containsKey(p.getUniqueId())) {
             getPlotPlayers().replace(p.getUniqueId(), timeout);
-        } else getPlotPlayers().put(p.getUniqueId(), timeout);
+        } else {
+            getPlotPlayers().put(p.getUniqueId(), timeout);
+        }
     }
 
     public void addBypasser(Player p) {
