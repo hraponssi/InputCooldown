@@ -201,10 +201,10 @@ public class Main extends JavaPlugin {
     public boolean msgCooldown(Player p, Location l) {
         String key = p.getUniqueId().toString() + l.getBlockX() + l.getBlockY() + l.getBlockZ()
                 + l.getWorld().getName(); // uuid + xyz + name
-        if (msgCooldowns.containsKey(key)) {
+        if (msgCooldowns.containsKey(key)) { // Block has a message cooldown
             return true;
         } else {
-            msgCooldowns.put(key, 20); // cooldown for messages set here
+            msgCooldowns.put(key, 20); // Set a new cooldown
             return false;
         }
     }
