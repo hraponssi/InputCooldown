@@ -33,6 +33,7 @@ public class InputHandler {
                 if (plugin.getPlayers().containsKey(p.getUniqueId())) { // Player is a block click cooldown setter
 
                     event.setCancelled(true);
+                    PlotId plotId = utils.getPlot(p); // TODO make a new system to block null values (roads etc) unless admin. Maybe use admin mode and also add a config option to always have admin mode on for admin users
                     if (utils.plotAccessLevel(p) < plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
                         if (msg) {
                             p.sendMessage(Lang.get("PLOTACCESSERROR"));
@@ -41,7 +42,7 @@ public class InputHandler {
                     } else if (plugin.inAdminMode(p) && msg) {
                         p.sendMessage(Lang.get("ADMINBYPASS"));
                     }
-                    if (plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.getMaxPlotCooldowns()
+                    if (plugin.plotCooldownCount(utils.toStringId(plotId)) >= plugin.getMaxPlotCooldowns()
                             && plugin.getMaxPlotCooldowns() > -1) {
                         if (msg) {
                             p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.getMaxPlotCooldowns()));

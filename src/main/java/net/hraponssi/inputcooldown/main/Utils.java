@@ -31,17 +31,17 @@ public class Utils {
         inputEnds.add("_pressure_plate");
     }
 
-    public boolean inOwnPlot(Player p) {
+    public boolean inOwnPlot(Player p) { //TODO check references for what location this is used with, so plot borders cant be cheated
         PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
         Plot plot = player.getCurrentPlot();
         if (plot == null) return false;
-        if (plot.hasOwner()) if (plot.getOwner().equals(p.getUniqueId())) {
+        if (plot.hasOwner() && plot.getOwner().equals(p.getUniqueId())) {
             return true;
         }
         return false;
     }
 
-    public int plotAccessLevel(Player p) {
+    public int plotAccessLevel(Player p) { //TODO check what location is interacted with, so plot borders cant be cheated
         PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
         Plot plot = player.getCurrentPlot();
         UUID pUUID = p.getUniqueId();
@@ -52,7 +52,7 @@ public class Utils {
         return 0;
     }
 
-    public PlotId getPlot(Player p) {
+    public PlotId getPlot(Player p) { //TODO either deprecate or rename, can lead to oversight of player not standing in input location's plot
         PlotPlayer<?> player = PlotSquared.platform().playerManager().getPlayer(p.getUniqueId());
         Plot plot = player.getCurrentPlot();
         if (plot == null) return null;
@@ -83,7 +83,7 @@ public class Utils {
 
     public boolean isInput(Material mat) {
         boolean input = false;
-        if (mat.name().toLowerCase() == "lever") input = true;
+        if (mat.name().toLowerCase().equals("lever")) input = true;
         for (String ending : inputEnds) {
             if (mat.name().toLowerCase().endsWith(ending)) input = true;
         }
