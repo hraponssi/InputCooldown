@@ -1,17 +1,18 @@
 package net.hraponssi.inputcooldown.main;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public class Cooldown {
 
-    public Cooldown(Integer time, Location loc, Player p) {
+    public Cooldown(Integer time, Location loc, UUID uuid) {
         this.time = time;
         this.loc = loc;
-        this.user = p;
+        this.userUUID = uuid;
     }
 
-    Player user;
+    UUID userUUID;
     Location loc;
     int age, time;
 

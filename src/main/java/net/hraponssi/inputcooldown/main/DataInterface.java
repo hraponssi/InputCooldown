@@ -50,7 +50,7 @@ public class DataInterface {
             String stringLoc = loc.getBlockX() + "~" + loc.getBlockY() + "~" + loc.getBlockZ() + "~"
                     + loc.getWorld().getName();
             cbs.add(cooldown.time + "~" + cooldown.age + ":" + stringLoc + ":"
-                    + cooldown.user.getUniqueId().toString());
+                    + cooldown.userUUID.toString());
         }
 
         configManager.saveData();

@@ -15,7 +15,6 @@ public class InputCooldownCompletion implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {
 
         List<String> completions = new ArrayList<>();
-        Player p = (Player) sender;
         if (args.length == 1) {
             completions.add("remove");
             completions.add("set");
@@ -26,8 +25,8 @@ public class InputCooldownCompletion implements TabCompleter {
             completions.add("check");
             completions.add("help");
             completions.add("bypass");
-            if (p.hasPermission("ic.admin")) completions.add("admin");
-            if (p.hasPermission("ic.admin")) completions.add("reload");
+            if (sender.hasPermission("ic.admin")) completions.add("admin");
+            if (sender.hasPermission("ic.admin")) completions.add("reload");
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set")) {

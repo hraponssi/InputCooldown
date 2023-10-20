@@ -350,27 +350,27 @@ public class Main extends JavaPlugin {
         if (pSquared) {
             PlotId id = utils.getPlot(b.getLocation());
             if (cooldownBlocks.containsKey(b.getLocation())) {
-                cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+                cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p.getUniqueId()));
             } else if (cooldownPlotBlocks.containsKey(id.getX() + ";" + id.getY() + ":" + b.getType().name())) {
                 getLogger().info("Tried to cooldown block but only found plot material specific cooldown " + id.getX()
                         + ";" + id.getY() + " " + b.getType().name());
                 cooldowns.put(b.getLocation(),
                         new Cooldown(cooldownPlotBlocks.get(id.getX() + ";" + id.getY() + ":" + b.getType().name()),
-                                b.getLocation(), p));
+                                b.getLocation(), p.getUniqueId()));
             } else if (cooldownPlots.containsKey(id.getX() + ";" + id.getY())) {
                 getLogger().info("Tried to cooldown block but only found plot cooldown " + id.getX() + ";" + id.getY());
                 cooldowns.put(b.getLocation(),
-                        new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p));
+                        new Cooldown(cooldownPlots.get(id.getX() + ";" + id.getY()), b.getLocation(), p.getUniqueId()));
             }
         } else {
             if (cooldownBlocks.containsKey(b.getLocation())) {
-                cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p));
+                cooldowns.put(b.getLocation(), new Cooldown(cooldownBlocks.get(b.getLocation()), b.getLocation(), p.getUniqueId()));
             }
         }
     }
 
     public void addCooldown(Block b, Player p, int time, int age) {
-        Cooldown cooldown = new Cooldown(time, b.getLocation(), p);
+        Cooldown cooldown = new Cooldown(time, b.getLocation(), p.getUniqueId());
         cooldown.age = age;
         cooldowns.put(b.getLocation(), cooldown);
     }
