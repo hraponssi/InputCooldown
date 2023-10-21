@@ -118,9 +118,9 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
                         return true;
                     }
-                    if(utils.isInteger(args[2]) || (args[2].length() >= 2 && utils.isInteger(args[2].substring(0, args[2].length()-1)))) {
+                    if(utils.isInt(args[2]) || (args[2].length() >= 2 && utils.isInt(args[2].substring(0, args[2].length()-1)))) {
                         int num = -1;
-                        if (args[2].length() >= 2 && utils.isInteger(args[2].substring(0, args[2].length()-1)) && !utils.isInteger(args[2])) {
+                        if (args[2].length() >= 2 && utils.isInt(args[2].substring(0, args[2].length()-1)) && !utils.isInt(args[2])) {
                             String multiplier = args[2].substring(args[2].length()-1, args[2].length());
                             if(multiplier.equals("s")) { //seconds
                                 num = Integer.parseInt(args[2].substring(0, args[2].length()-1))*1;
@@ -162,7 +162,7 @@ public class Commands implements CommandExecutor {
                             }else if(plugin.inAdminMode(p)) {
                                 p.sendMessage(Lang.get("ADMINBYPASS"));
                             }
-                            if(plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.getMaxPlotCooldowns() && plugin.getMaxPlotCooldowns() > -1) {
+                            if(plugin.plotCooldownCount(utils.getPlot(p).toString()) >= plugin.getMaxPlotCooldowns() && plugin.getMaxPlotCooldowns() > -1) {
                                 p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.getMaxPlotCooldowns()));
                                 return true;
                             }

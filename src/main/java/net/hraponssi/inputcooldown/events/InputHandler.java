@@ -42,7 +42,7 @@ public class InputHandler {
                     } else if (plugin.inAdminMode(p) && msg) {
                         p.sendMessage(Lang.get("ADMINBYPASS"));
                     }
-                    if (plugin.plotCooldownCount(utils.toStringId(plotId)) >= plugin.getMaxPlotCooldowns()
+                    if (plugin.plotCooldownCount(plotId.toString()) >= plugin.getMaxPlotCooldowns()
                             && plugin.getMaxPlotCooldowns() > -1) {
                         if (msg) {
                             p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.getMaxPlotCooldowns()));
@@ -66,7 +66,7 @@ public class InputHandler {
                     } else if (plugin.inAdminMode(p) && msg) {
                         p.sendMessage(Lang.get("ADMINBYPASS"));
                     }
-                    if (plugin.plotCooldownCount(utils.toStringId(utils.getPlot(p))) >= plugin.getMaxPlotCooldowns()
+                    if (plugin.plotCooldownCount(utils.getPlot(p).toString()) >= plugin.getMaxPlotCooldowns()
                             && plugin.getMaxPlotCooldowns() > -1) {
                         if (msg) {
                             p.sendMessage(Lang.get("MAXCOOLDOWNCOUNT", "" + plugin.getMaxPlotCooldowns()));

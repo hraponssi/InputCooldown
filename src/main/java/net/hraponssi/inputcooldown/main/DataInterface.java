@@ -62,11 +62,13 @@ public class DataInterface {
             String[] splitted = key.split(":");
             String[] timesplitted = splitted[0].split("~");
             String[] locsplitted = splitted[1].split("~");
-            Location loc = utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]),
-                    utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3]));
+            Location loc = new Location(Bukkit.getWorld(locsplitted[3]),
+                    Integer.parseInt(locsplitted[0]),
+                    Integer.parseInt(locsplitted[1]),
+                    Integer.parseInt(locsplitted[2]));
             UUID uuid = UUID.fromString(splitted[2]);
-            plugin.addCooldown(loc.getBlock(), uuid, utils.toInt(timesplitted[0]),
-                    utils.toInt(timesplitted[1]));
+            plugin.addCooldown(loc.getBlock(), uuid, Integer.parseInt(timesplitted[0]),
+                    Integer.parseInt(timesplitted[1]));
         }
 
         List<String> cb = configManager.getData("data").getStringList("cooldownBlocks");
@@ -75,9 +77,11 @@ public class DataInterface {
             String[] locsplitted = splitted[1].split("~");
             if (Bukkit.getWorld(locsplitted[3]) != null) {
                 plugin.addCooldownBlock(
-                        utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]),
-                                utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3])).getBlock(),
-                        utils.toInt(splitted[0]));
+                        new Location(Bukkit.getWorld(locsplitted[3]), 
+                                Integer.parseInt(locsplitted[0]),
+                                Integer.parseInt(locsplitted[1]), 
+                                Integer.parseInt(locsplitted[2])).getBlock(),
+                        Integer.parseInt(splitted[0]));
             } else {
                 plugin.getLogger().severe("Tried to load block cooldown in invalid world '" + locsplitted[3] + "'");
             }
@@ -88,11 +92,11 @@ public class DataInterface {
             String[] splitted = key.split(":");
             String[] datasplitted = splitted[1].split("~");
             if (datasplitted[0].equals("DEFAULT")) {
-                plugin.addCooldownPlot(splitted[0], utils.toInt(datasplitted[1]));
+                plugin.addCooldownPlot(splitted[0], Integer.parseInt(datasplitted[1]));
             } else {
                 Material mat = Material.getMaterial(datasplitted[0]);
                 if (utils.isInput(mat)) {
-                    plugin.addCooldownPlotBlock(splitted[0], mat, utils.toInt(datasplitted[1]));
+                    plugin.addCooldownPlotBlock(splitted[0], mat, Integer.parseInt(datasplitted[1]));
                 } else {
                     plugin.getLogger().warning(
                             "Tried to parse plot wide block cooldown with invalid input type " + datasplitted[0]);
