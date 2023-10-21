@@ -369,8 +369,8 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public void addCooldown(Block b, Player p, int time, int age) {
-        Cooldown cooldown = new Cooldown(time, b.getLocation(), p.getUniqueId());
+    public void addCooldown(Block b, UUID uuid, int time, int age) {
+        Cooldown cooldown = new Cooldown(time, b.getLocation(), uuid);
         cooldown.age = age;
         cooldowns.put(b.getLocation(), cooldown);
     }

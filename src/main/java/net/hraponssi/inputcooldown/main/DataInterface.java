@@ -65,7 +65,7 @@ public class DataInterface {
             Location loc = utils.newLocation(utils.toInt(locsplitted[0]), utils.toInt(locsplitted[1]),
                     utils.toInt(locsplitted[2]), utils.getWorld(locsplitted[3]));
             UUID uuid = UUID.fromString(splitted[2]);
-            plugin.addCooldown(loc.getBlock(), Bukkit.getOfflinePlayer(uuid).getPlayer(), utils.toInt(timesplitted[0]),
+            plugin.addCooldown(loc.getBlock(), uuid, utils.toInt(timesplitted[0]),
                     utils.toInt(timesplitted[1]));
         }
 
