@@ -34,6 +34,7 @@ public class InputHandler {
 
                     event.setCancelled(true);
                     PlotId plotId = utils.getPlot(p); // TODO make a new system to block null values (roads etc) unless admin. Maybe use admin mode and also add a config option to always have admin mode on for admin users
+                    if (plotId == null) return;
                     if (utils.plotAccessLevel(p) < plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
                         if (msg) {
                             p.sendMessage(Lang.get("PLOTACCESSERROR"));
@@ -174,12 +175,9 @@ public class InputHandler {
                         if (msg) {
                             p.sendMessage(Lang.get("COOLDOWN", plugin.getCooldown(b) + "s"));
                         }
-                    } else if (bypassOwn || bypassAll || bypassOn) {
-                        // TODO what was this supposed to be used for
-                    } else {
+                    } else if (!(bypassOwn || bypassAll || bypassOn)) {
                         plugin.cooldown(b, p);
                     }
-
                 }
 	        }
 	    }
