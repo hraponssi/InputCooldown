@@ -119,10 +119,7 @@ public class Commands implements CommandExecutor {
                 }
             case "set":
                 if(p.hasPermission("ic.user")) {
-                    if(args.length<2) {
-                        p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
-                        return true;
-                    } else if(args.length<3) {
+                    if(args.length<3) {
                         p.sendMessage(Lang.get("INVALIDFORMAT", "set <click/block/plot> <cooldown in seconds>"));
                         return true;
                     }
