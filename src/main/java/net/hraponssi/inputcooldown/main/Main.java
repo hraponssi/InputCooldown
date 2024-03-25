@@ -78,7 +78,8 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (getServer().getPluginManager().getPlugin("PlotSquared").isEnabled()) {
+        if (getServer().getPluginManager().getPlugin("PlotSquared") != null
+                && getServer().getPluginManager().getPlugin("PlotSquared").isEnabled()) {
             pSquared = true;
             getLogger().info("PlotSquared detected!");
         }
@@ -91,10 +92,11 @@ public class Main extends JavaPlugin {
         utils = new Utils(pSquared);
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(eventHandlers, this);
+        InputCooldownCompletion completer = new InputCooldownCompletion(this);
         getCommand("ic").setExecutor(commands);
-        getCommand("ic").setTabCompleter(new InputCooldownCompletion());
+        getCommand("ic").setTabCompleter(completer);
         getCommand("inputcooldown").setExecutor(commands);
-        getCommand("inputcooldown").setTabCompleter(new InputCooldownCompletion());
+        getCommand("inputcooldown").setTabCompleter(completer);
         configManager.setup();
         dataInterface.loadLang();
         setConfig();
@@ -155,6 +157,10 @@ public class Main extends JavaPlugin {
                 // TODO Remove plot cooldowns for changed/removed owner?
             }
         }
+    }
+    
+    public boolean hasPlotSquared() {
+        return pSquared;
     }
 
     public void reloadCfg() {
@@ -218,10 +224,12 @@ public class Main extends JavaPlugin {
     }
 
     public void removeCooldownPlot(String id) {
+        if (!pSquared) return;
         if (cooldownPlots.containsKey(id)) cooldownPlots.remove(id);
     }
 
     public void removeCooldownPlotBlock(String id, Material mat) {
+        if (!pSquared) return;
         cooldownPlotBlocks.remove(id + ":" + mat.name());
     }
 
@@ -258,6 +266,7 @@ public class Main extends JavaPlugin {
     }
 
     public void setPlotPlayer(Player p, int timeout) {
+        if (!pSquared) return;
         if (getPlotPlayers().containsKey(p.getUniqueId())) {
             getPlotPlayers().replace(p.getUniqueId(), timeout);
         } else {
@@ -278,10 +287,12 @@ public class Main extends JavaPlugin {
     }
 
     public void addCooldownPlotBlock(String id, Material mat, int t) {
+        if (!pSquared) return;
         cooldownPlotBlocks.put(id + ":" + mat.name(), t);
     }
 
     public void addCooldownPlot(String id, int t) {
+        if (!pSquared) return;
         cooldownPlots.put(id, t);
     }
 
@@ -290,6 +301,7 @@ public class Main extends JavaPlugin {
     }
 
     public boolean isBlockCooldown(Block b) {
+        if (!pSquared) return false;
         PlotId id = utils.getPlot(b.getLocation());
         return hasCooldown(id.getX() + ";" + id.getY(), b.getType());
     }
@@ -330,6 +342,7 @@ public class Main extends JavaPlugin {
 
     public HashMap<String, Integer> getPlotCooldowns(String id) {
         HashMap<String, Integer> cooldowns = new HashMap<String, Integer>();
+        if (!pSquared) return cooldowns;
         for (Entry<String, Integer> entry : cooldownPlotBlocks.entrySet()) {
             String key = entry.getKey();
             int time = entry.getValue();
@@ -343,6 +356,7 @@ public class Main extends JavaPlugin {
     }
 
     public int plotCooldownCount(String id) {
+        if (!pSquared) return 0;
         return getPlotCooldowns(id).size();
     }
 
@@ -398,10 +412,6 @@ public class Main extends JavaPlugin {
     public void debug(String msg, Player p) {
         if (debugers.contains(p.getUniqueId())) p.sendMessage(
                 ChatColor.GRAY + "<" + ChatColor.YELLOW + "IC Debug" + ChatColor.GRAY + "> " + ChatColor.YELLOW + msg);
-    }
-
-    public boolean getPSquared() {
-        return pSquared;
     }
 
     public boolean getAdminJoinMsg() {

@@ -19,7 +19,7 @@ public class EventHandlers implements Listener {
     public EventHandlers(Main plugin) {
         super();
         this.plugin = plugin;
-        this.utils = new Utils(plugin.getPSquared());
+        this.utils = new Utils(plugin.hasPlotSquared());
         this.inputHandler = new InputHandler(plugin);
     }
 

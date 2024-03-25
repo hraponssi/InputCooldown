@@ -20,7 +20,7 @@ public class Commands implements CommandExecutor {
     public Commands(Main plugin) {
         super();
         this.plugin = plugin;
-        this.utils = new Utils(plugin.getPSquared());
+        this.utils = new Utils(plugin.hasPlotSquared());
     }
 
     @Override
@@ -47,11 +47,19 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(Lang.get("REMOVERSET"));
                             break;
                         case "block":
+                            if (!plugin.hasPlotSquared()) {
+                                p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+                                break;
+                            }
                             plugin.removePlayer(p);
                             p.sendMessage(Lang.get("REMOVERSETTYPE"));
                             plugin.setRemover(p, "block");
                             break;
                         case "plot":
+                            if (!plugin.hasPlotSquared()) {
+                                p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+                                return true;
+                            }
                             if (utils.plotAccessLevel(p) < plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
                                 p.sendMessage(Lang.get("PLOTACCESSERROR"));
                                 return true;
@@ -152,10 +160,18 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(Lang.get("NOWSETTING", num + "s"));
                             break;
                         case "block":
+                            if (!plugin.hasPlotSquared()) {
+                                p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+                                break;
+                            }
                             p.sendMessage(Lang.get("SETTINGPLOTBLOCKCOOLDOWN", num + "s"));
                             plugin.setPlotPlayer(p, num*20);
                             break;
                         case "plot":
+                            if (!plugin.hasPlotSquared()) {
+                                p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+                                return true;
+                            }
                             if(utils.plotAccessLevel(p) < plugin.getMinimumAccess()  && !plugin.inAdminMode(p)) {
                                 p.sendMessage(Lang.get("PLOTACCESSERROR"));
                                 return true;
@@ -202,7 +218,11 @@ public class Commands implements CommandExecutor {
                 }
                 return true;
             case "list":
-                if(p.hasPermission("ic.user")) {
+                if(p.hasPermission("ic.user")) { //TODO for non plotsquared
+                    if (!plugin.hasPlotSquared()) {
+                        p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+                        return true;
+                    }
                     if(utils.getPlot(p) != null) {
                         if(utils.plotAccessLevel(p) < plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
                             p.sendMessage(Lang.get("PLOTACCESSERROR"));
@@ -264,11 +284,14 @@ public class Commands implements CommandExecutor {
                     p.sendMessage(Lang.get("NOPERMISSION"));
                 }
                 return true;
+            case "help":
+                sendHelp(p);
+                return true;
             default:
                 p.sendMessage(Lang.get("INVALIDARGUMENTS"));
                 return true;
             }
-        }else {
+        } else {
             return false;
         }
     }
@@ -294,16 +317,19 @@ public class Commands implements CommandExecutor {
                 p.sendMessage(Lang.get("NOLONGERSETTER"));
             }
         }
-        plugin.debug("Debug plot info:", p);
-        if(utils.plotAccessLevel(p) >= plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
-            plugin.debug(ChatColor.GREEN + "You can access this plot", p);
-        }else {
-            plugin.debug(ChatColor.RED + "You cannot access this plot", p);
-        }
-        if(utils.getPlot(p) != null) {
-            plugin.debug("plot id: " + utils.getPlot(p).getX() + "," + utils.getPlot(p).getY(), p);
-        }else {
-            plugin.debug("That plot is invalid", p);
+        if (plugin.hasPlotSquared()) {
+            p.sendMessage(Lang.get("PLOTSQUAREDDISABLED"));
+            plugin.debug("Debug plot info:", p);
+            if(utils.plotAccessLevel(p) >= plugin.getMinimumAccess() && !plugin.inAdminMode(p)) {
+                plugin.debug(ChatColor.GREEN + "You can access this plot", p);
+            }else {
+                plugin.debug(ChatColor.RED + "You cannot access this plot", p);
+            }
+            if(utils.getPlot(p) != null) {
+                plugin.debug("plot id: " + utils.getPlot(p).getX() + "," + utils.getPlot(p).getY(), p);
+            }else {
+                plugin.debug("That plot is invalid", p);
+            }
         }
     }
 

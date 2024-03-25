@@ -8,8 +8,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
+import net.hraponssi.inputcooldown.main.Main;
+import net.hraponssi.inputcooldown.main.Utils;
+
 public class InputCooldownCompletion implements TabCompleter {
 
+    Main plugin;
+
+    public InputCooldownCompletion(Main plugin) {
+        this.plugin = plugin;
+    }
+    
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {
 
@@ -20,7 +29,9 @@ public class InputCooldownCompletion implements TabCompleter {
             completions.add("unset");
             completions.add("cancel");
             completions.add("reset");
-            completions.add("list");
+            if (plugin.hasPlotSquared()) {
+                completions.add("list");
+            }
             completions.add("check");
             completions.add("help");
             completions.add("bypass");
@@ -30,12 +41,16 @@ public class InputCooldownCompletion implements TabCompleter {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set")) {
                 completions.add("click");
-                completions.add("block");
-                completions.add("plot");
+                if (plugin.hasPlotSquared()) {
+                    completions.add("block");
+                    completions.add("plot");
+                }
             } else if (args[0].equalsIgnoreCase("remove")) {
                 completions.add("click");
-                completions.add("block");
-                completions.add("plot");
+                if (plugin.hasPlotSquared()) {
+                    completions.add("block");
+                    completions.add("plot");
+                }
                 completions.add("cancel");
             }
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
