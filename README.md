@@ -2,7 +2,7 @@
 
 ![InputCooldown icon](Assets/icon.png)
 
-Set input cooldowns on buttons, levers, pressure plates, etc.
+Set input cooldowns on buttons, levers, pressure plates, etc. Built around plotsquared, but it can have basic functionality for admins only without it.
 
 ### Commands and permissions ###
 
@@ -14,7 +14,7 @@ Set input cooldowns on buttons, levers, pressure plates, etc.
 
 Multiverse-core - Makes sure worlds load before loading cooldowns/plugin, not required
 
-Plotsquared v6 - All plot access integration
+Plotsquared v7 - All plot access integration
 
 ### Building ###
 

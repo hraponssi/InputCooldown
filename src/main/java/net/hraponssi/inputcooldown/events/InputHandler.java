@@ -51,7 +51,7 @@ public class InputHandler {
                             }
                             return;
                         }
-                    } else if (plugin.inAdminMode(p)) { // If there is no plotsquared require admin mode
+                    } else if (plugin.inAdminMode(p)) { // If there is no plotsquared, require admin mode
                         if (msg) {
                             p.sendMessage(Lang.get("ADMINBYPASS"));
                         }
